@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { api } from '../api/api';
 
-export default function CreateClient() {
+export default function EditClient() {
+
+  const { id } = useParams();
 
   const [nombre, setNombre] =
     useState('');
@@ -12,13 +15,52 @@ export default function CreateClient() {
   const [email, setEmail] =
     useState('');
 
+  useEffect(() => {
+
+    loadClient();
+
+  }, []);
+
+  const loadClient =
+    async () => {
+
+      try {
+
+        const response =
+          await api.get(
+            `/clients/${id}`,
+          );
+
+        const client =
+          response.data;
+
+        setNombre(
+          client.nombre ?? '',
+        );
+
+        setApellido(
+          client.apellido ?? '',
+        );
+
+        setEmail(
+          client.email ?? '',
+        );
+
+      } catch (error) {
+
+        console.error(error);
+
+      }
+
+    };
+
   const saveClient =
     async () => {
 
       try {
 
-        await api.post(
-          '/clients',
+        await api.patch(
+          `/clients/${id}`,
           {
             nombre,
             apellido,
@@ -27,7 +69,7 @@ export default function CreateClient() {
         );
 
         alert(
-          'Cliente creado',
+          'Cliente actualizado',
         );
 
       } catch (error) {
@@ -35,7 +77,7 @@ export default function CreateClient() {
         console.error(error);
 
         alert(
-          'Error al crear',
+          'Error al actualizar',
         );
 
       }
@@ -47,41 +89,41 @@ export default function CreateClient() {
     <div>
 
       <h1>
-        Nuevo Cliente
+        Editar Cliente
       </h1>
 
       <input
-        placeholder="Nombre"
         value={nombre}
         onChange={(e) =>
           setNombre(
             e.target.value,
           )
         }
+        placeholder="Nombre"
       />
 
       <br />
 
       <input
-        placeholder="Apellido"
         value={apellido}
         onChange={(e) =>
           setApellido(
             e.target.value,
           )
         }
+        placeholder="Apellido"
       />
 
       <br />
 
       <input
-        placeholder="Email"
         value={email}
         onChange={(e) =>
           setEmail(
             e.target.value,
           )
         }
+        placeholder="Email"
       />
 
       <br />
@@ -89,7 +131,7 @@ export default function CreateClient() {
       <button
         onClick={saveClient}
       >
-        Guardar
+        Guardar Cambios
       </button>
 
     </div>

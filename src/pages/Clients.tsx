@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api/api';
+import { Link } from 'react-router-dom';
 
 export default function Clients() {
 
@@ -33,15 +34,46 @@ export default function Clients() {
       }
 
     };
+const deleteClient =
+  async (id: string) => {
 
+    const confirmar =
+      confirm(
+        '¿Eliminar cliente?',
+      );
+
+    if (!confirmar)
+      return;
+
+    try {
+
+      await api.delete(
+        `/clients/${id}`,
+      );
+
+      loadClients();
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
+  };
   return (
 
     <div>
 
       <h1>Clientes</h1>
-      <button>
-         Nuevo Cliente
-      </button>
+      <Link to="/clients/new">
+
+        <button>
+
+          Nuevo Cliente
+
+        </button>
+
+      </Link>
       <table>
 
         <thead>
@@ -53,6 +85,8 @@ export default function Clients() {
             <th>Nombre</th>
 
             <th>Email</th>
+
+            <th>Acciones</th>
 
           </tr>
 
@@ -93,6 +127,25 @@ export default function Clients() {
                   }
 
                 </td>
+                <td>
+                  <Link
+                    to={`/clients/edit/${client.id_cliente}`}
+                  >
+                    <button>
+                      Editar
+                    </button>
+                  </Link>
+
+                  <button
+                    onClick={() =>
+                      deleteClient(
+                        client.id_cliente,
+                      )
+                    }
+                  >
+                    Eliminar
+                  </button>
+                </td>                
 
               </tr>
 
