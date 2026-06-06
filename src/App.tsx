@@ -6,6 +6,7 @@ import {
 
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import Clients from './pages/Clients';
 
 function App() {
 
@@ -23,6 +24,10 @@ function App() {
         <Route
           path="/dashboard"
           element={<Dashboard />}
+        />
+        <Route
+          path="/clients"
+          element={<Clients />}
         />
 
       </Routes>
