@@ -20,8 +20,32 @@ export default function CreateProduct() {
 
   const saveProduct =
     async () => {
-
+      
       try {
+        if (
+  !codigo.trim() ||
+  !descripcion.trim()
+) {
+
+  alert(
+    'Complete todos los campos',
+  );
+
+  return;
+
+}
+
+if (
+  Number(precio) <= 0
+) {
+
+  alert(
+    'Precio inválido',
+  );
+
+  return;
+
+}
 
         await api.post(
           '/products',
@@ -38,7 +62,7 @@ export default function CreateProduct() {
             stock_minimo:
               Number(stockMinimo),
 
-            estado: true,
+            //estado: true,
           },
         );
 
@@ -46,15 +70,23 @@ export default function CreateProduct() {
           'Producto creado',
         );
 
-      } catch (error) {
+      } catch (error: any) {
 
-        console.error(error);
+  console.error(error);
 
-        alert(
-          'Error al crear producto',
-        );
+  console.log(
+    error.response?.data,
+  );
 
-      }
+  alert(
+    JSON.stringify(
+      error.response?.data,
+      null,
+      2,
+    ),
+  );
+
+}
 
     };
 
