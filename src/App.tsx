@@ -12,6 +12,9 @@ import EditClient from './pages/EditClient';
 import Products from './pages/Products';
 import CreateProduct from './pages/CreateProduct';
 import EditProduct from './pages/EditProduct';
+import LowStock from './pages/LowStock';
+import Orders from './pages/Orders';
+import CreateOrder from './pages/CreateOrder';
 
 function App() {
 
@@ -53,6 +56,18 @@ function App() {
         <Route
           path="/products/edit/:id"
           element={<EditProduct />}
+        />
+        <Route
+          path="/low-stock"
+          element={<LowStock />}
+        />
+        <Route
+          path="/orders"
+          element={<Orders />}
+        />
+        <Route
+          path="/orders/new"
+          element={<CreateOrder />}
         />
 
       </Routes>
