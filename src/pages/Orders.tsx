@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api/api';
+import { Link } from 'react-router-dom';
 
 export default function Orders() {
 
@@ -34,6 +35,70 @@ export default function Orders() {
 
     };
 
+  const approveOrder =
+    async (id: string) => {
+
+      try {
+
+        await api.patch(
+          `/orders/${id}`,
+          {
+            estado:
+              'APROBADA',
+          },
+        );
+
+        alert(
+          'Orden aprobada',
+        );
+
+        loadOrders();
+
+      } catch (error: any) {
+
+        console.error(error);
+
+        alert(
+          error.response?.data?.message ||
+          'Error',
+        );
+
+      }
+
+    };
+
+  const cancelOrder =
+    async (id: string) => {
+
+      try {
+
+        await api.patch(
+          `/orders/${id}`,
+          {
+            estado:
+              'CANCELADA',
+          },
+        );
+
+        alert(
+          'Orden cancelada',
+        );
+
+        loadOrders();
+
+      } catch (error: any) {
+
+        console.error(error);
+
+        alert(
+          error.response?.data?.message ||
+          'Error',
+        );
+
+      }
+
+    };
+
   return (
 
     <div>
@@ -42,6 +107,11 @@ export default function Orders() {
         Órdenes
       </h1>
 
+      <div style={{ marginBottom: '15px' }}>
+        <Link to="/orders/new">
+          <button>Nueva Orden</button>
+        </Link>
+      </div>
       <table border={1}>
 
         <thead>
@@ -57,6 +127,8 @@ export default function Orders() {
             <th>Total</th>
 
             <th>Fecha</th>
+
+            <th>Acciones</th>
 
           </tr>
 
@@ -82,15 +154,13 @@ export default function Orders() {
                 <td>
 
                   {
-                    order.clientes
-                      ?.nombre
+                    order.clientes?.nombre
                   }
 
                   {' '}
 
                   {
-                    order.clientes
-                      ?.apellido
+                    order.clientes?.apellido
                   }
 
                 </td>
@@ -102,10 +172,13 @@ export default function Orders() {
                 </td>
 
                 <td>
+
                   $
+
                   {
                     order.total
                   }
+
                 </td>
 
                 <td>
@@ -115,7 +188,75 @@ export default function Orders() {
                   ).toLocaleDateString()}
 
                 </td>
+<td>
 
+  <Link
+    to={`/orders/${order.id_orden_compra}`}
+  >
+    Ver
+  </Link>
+
+  {' '}
+
+  {order.estado === 'PENDIENTE' && (
+
+    <>
+      <button
+        onClick={() =>
+          approveOrder(
+            order.id_orden_compra,
+          )
+        }
+      >
+        Aprobar
+      </button>
+
+      {' '}
+
+      <button
+        onClick={() =>
+          cancelOrder(
+            order.id_orden_compra,
+          )
+        }
+      >
+        Cancelar
+      </button>
+    </>
+
+  )}
+
+  {order.estado === 'APROBADA' && (
+
+    <>
+      {' '}
+
+      <button
+        onClick={() =>
+          cancelOrder(
+            order.id_orden_compra,
+          )
+        }
+      >
+        Cancelar
+      </button>
+
+    </>
+
+  )}
+
+  {order.estado === 'CANCELADA' && (
+
+    <>
+      {' '}
+      <span>
+        Cancelada
+      </span>
+    </>
+
+  )}
+
+</td>
               </tr>
 
             ),

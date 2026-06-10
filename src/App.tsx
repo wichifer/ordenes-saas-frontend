@@ -1,9 +1,9 @@
 import {
-  BrowserRouter,
-  Routes,
-  Route,
+BrowserRouter,
+Routes,
+Route,
 } from 'react-router-dom';
-
+import Layout from './components/Layout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Clients from './pages/Clients';
@@ -15,66 +15,176 @@ import EditProduct from './pages/EditProduct';
 import LowStock from './pages/LowStock';
 import Orders from './pages/Orders';
 import CreateOrder from './pages/CreateOrder';
+import OrderDetail from './pages/OrderDetail';
+import Cash from './pages/Cash';
+import StockMovements from './pages/StockMovements';
+import Payments from './pages/Payments';
+import Reports from './pages/Reports';
+import Audit from './pages/Audit';
 
 function App() {
 
-  return (
+return (
 
-    <BrowserRouter>
+<BrowserRouter>
 
-      <Routes>
+  <Routes>
 
-        <Route
-          path="/"
-          element={<Login />}
-        />
+    <Route
+      path="/"
+      element={<Login />}
+    />
 
-        <Route
-          path="/dashboard"
-          element={<Dashboard />}
-        />
-        <Route
-          path="/clients"
-          element={<Clients />}
-        />
-        <Route
-          path="/clients/new"
-          element={<CreateClient />}
-        />
-        <Route
-          path="/clients/edit/:id"
-          element={<EditClient />}
-        />
-        <Route
-          path="/products"
-          element={<Products />}
-        />
-        <Route
-          path="/products/new"
-          element={<CreateProduct />}
-        />
-        <Route
-          path="/products/edit/:id"
-          element={<EditProduct />}
-        />
-        <Route
-          path="/low-stock"
-          element={<LowStock />}
-        />
-        <Route
-          path="/orders"
-          element={<Orders />}
-        />
-        <Route
-          path="/orders/new"
-          element={<CreateOrder />}
-        />
+    <Route
+      path="/dashboard"
+      element={
+        <Layout>
+          <Dashboard />
+        </Layout>
+      }
+    />
 
-      </Routes>
+    <Route
+      path="/clients"
+      element={
+        <Layout>
+          <Clients />
+        </Layout>
+      }
+    />
 
-    </BrowserRouter>
+    <Route
+      path="/clients/new"
+      element={
+        <Layout>
+          <CreateClient />
+        </Layout>
+      }
+    />
 
-  );
+    <Route
+      path="/clients/edit/:id"
+      element={
+        <Layout>
+          <EditClient />
+        </Layout>
+      }
+    />
+
+    <Route
+      path="/products"
+      element={
+        <Layout>
+          <Products />
+        </Layout>
+      }
+    />
+
+    <Route
+      path="/products/new"
+      element={
+        <Layout>
+          <CreateProduct />
+        </Layout>
+      }
+    />
+
+    <Route
+      path="/products/edit/:id"
+      element={
+        <Layout>
+          <EditProduct />
+        </Layout>
+      }
+    />
+
+    <Route
+      path="/low-stock"
+      element={
+        <Layout>
+          <LowStock />
+        </Layout>
+      }
+    />
+
+    <Route
+      path="/orders"
+      element={
+        <Layout>
+          <Orders />
+        </Layout>
+      }
+    />
+
+    <Route
+      path="/orders/new"
+      element={
+        <Layout>
+          <CreateOrder />
+        </Layout>
+      }
+    />
+
+    <Route
+      path="/orders/:id"
+      element={
+        <Layout>
+          <OrderDetail />
+        </Layout>
+      }
+    />
+
+    <Route
+      path="/cash"
+      element={
+        <Layout>
+          <Cash />
+        </Layout>
+      }
+    />
+
+    <Route
+      path="/stock-movements"
+      element={
+        <Layout>
+          <StockMovements />
+        </Layout>
+      }
+    />
+
+    <Route
+      path="/payments"
+      element={
+        <Layout>
+          <Payments />
+        </Layout>
+      }
+    />
+
+    <Route
+      path="/reports"
+      element={
+        <Layout>
+          <Reports />
+        </Layout>
+      }
+    />
+
+    <Route
+      path="/audit"
+      element={
+        <Layout>
+          <Audit />
+        </Layout>
+      }
+    />
+
+  </Routes>
+
+</BrowserRouter>
+
+
+);
 
 }
 

@@ -56,40 +56,56 @@ export default function CreateOrder() {
 
     };
 
-  const addItem =
-    () => {
+const addItem = () => {
 
-      const product =
-        products.find(
-          (p) =>
-            p.id_articulo ===
-            productId,
-        );
+  const product = products.find(
+    (p) =>
+      p.id_articulo === productId,
+  );
 
-      if (!product)
-        return;
+  if (!product) return;
 
-      setItems([
-        ...items,
+  const existente = items.find(
+    (i) =>
+      i.id_articulo === product.id_articulo,
+  );
 
-        {
-          id_articulo:
-            product.id_articulo,
+  if (existente) {
 
-          descripcion_articulo:
-            product.descripcion,
+    setItems(
+      items.map((i) =>
+        i.id_articulo === product.id_articulo
+          ? {
+              ...i,
+              cantidad:
+                i.cantidad + quantity,
+            }
+          : i,
+      ),
+    );
 
-          cantidad:
-            quantity,
+  } else {
 
-          precio_unitario:
-            Number(
-              product.precio_final,
-            ),
-        },
-      ]);
+    setItems([
+      ...items,
+      {
+        id_articulo:
+          product.id_articulo,
+        descripcion_articulo:
+          product.descripcion,
+        cantidad: quantity,
+        precio_unitario: Number(
+          product.precio_final,
+        ),
+      },
+    ]);
 
-    };
+  }
+
+  setProductId('');
+  setQuantity(1);
+
+};
 
   const total =
     items.reduce(
@@ -126,7 +142,10 @@ export default function CreateOrder() {
         alert(
           'Orden creada',
         );
-
+        setClientId('');
+        setProductId('');
+        setQuantity(1);
+        setItems([]);
       } catch (error) {
 
         console.error(error);

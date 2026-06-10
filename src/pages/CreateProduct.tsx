@@ -69,6 +69,11 @@ if (
         alert(
           'Producto creado',
         );
+        setCodigo('');
+        setDescripcion('');
+        setPrecio('');
+        setStockActual('');
+        setStockMinimo('');
 
       } catch (error: any) {
 

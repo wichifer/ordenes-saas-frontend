@@ -29,6 +29,9 @@ export default function CreateClient() {
         alert(
           'Cliente creado',
         );
+        setNombre('');
+        setApellido('');
+        setEmail('');
 
       } catch (error) {
 
