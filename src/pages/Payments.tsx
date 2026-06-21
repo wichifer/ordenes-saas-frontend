@@ -1,9 +1,12 @@
 
 import { useEffect, useState } from 'react';
 import { api } from '../api/api';
+import { useSearchParams,} from 'react-router-dom';
+
 
 export default function Payments() {
-
+const [searchParams] =
+  useSearchParams();
   const [payments, setPayments] =
     useState<any[]>([]);
 
@@ -27,18 +30,42 @@ export default function Payments() {
       (o) =>
         o.id_orden_compra === idOrden,
     );
-const ordenesAprobadas =
-  orders.filter(
-    (o) =>
-      o.estado ===
-      'APROBADA',
-  );
-  useEffect(() => {
+    useEffect(() => {
 
-    loadPayments();
-    loadOrders();
+  if (ordenSeleccionada) {
 
-  }, []);
+    setMonto(
+      String(
+        ordenSeleccionada.saldo_pendiente,
+      ),
+    );
+
+  }
+
+}, [ordenSeleccionada]);
+// const ordenesAprobadas =
+//   orders.filter(
+//     (o) =>
+//       o.estado ===
+//       'APROBADA',
+//   );
+ useEffect(() => {
+
+  loadPayments();
+  loadOrders();
+
+}, []); 
+useEffect(() => {
+  const orderId = searchParams.get('order');
+
+  if (
+    orderId &&
+    orders.length > 0 &&
+    idOrden === ''
+  ) {
+    setIdOrden(orderId);
+  }
+}, [orders, searchParams, idOrden]);
 
   const loadPayments =
     async () => {
@@ -69,7 +96,7 @@ const ordenesAprobadas =
 
         const response =
           await api.get(
-            '/orders',
+           '/payments/pending-orders',
           );
 
         setOrders(
@@ -140,7 +167,7 @@ const ordenesAprobadas =
         setObservaciones('');
 
         loadPayments();
-
+        loadOrders();
       } catch (error: any) {
 
         console.error(error);
@@ -181,7 +208,7 @@ const ordenesAprobadas =
           Seleccionar Orden Aprobada
         </option>
 
-          {ordenesAprobadas.map(
+          {orders.map(
             (order) => (
 
             <option
@@ -203,34 +230,53 @@ const ordenesAprobadas =
         )}
 
       </select>
-<div
+{<div
   style={{
     marginTop: '10px',
     marginBottom: '10px',
   }}
 >
+{ordenSeleccionada && (
 
-  <strong>Orden:</strong>{' '}
-  {ordenSeleccionada?.numero_orden}
+  <div
+    style={{
+      marginTop: '10px',
+      marginBottom: '10px',
+      padding: '10px',
+      border: '1px solid #ccc',
+    }}
+  >
 
-  {' | '}
+    <div>
+      <strong>Orden:</strong>{' '}
+      {ordenSeleccionada.numero_orden}
+    </div>
 
-  <strong>Estado:</strong>{' '}
-  {ordenSeleccionada?.estado}
+    <div>
+      <strong>Cliente:</strong>{' '}
+      {ordenSeleccionada.cliente}
+    </div>
 
-  {' | '}
+    <div>
+      <strong>Total:</strong>{' '}
+      ${ordenSeleccionada.total}
+    </div>
 
-  <strong>Cliente:</strong>{' '}
-  {ordenSeleccionada?.clientes?.nombre}{' '}
-  {ordenSeleccionada?.clientes?.apellido}
+    <div>
+      <strong>Pagado:</strong>{' '}
+      ${ordenSeleccionada.total_pagado}
+    </div>
 
-  {' | '}
+    <div>
+      <strong>Pendiente:</strong>{' '}
+      ${ordenSeleccionada.saldo_pendiente}
+    </div>
 
-  <strong>Total:</strong>{' '}
-  ${ordenSeleccionada?.total}
+  </div>
 
-</div>
-      <div
+)}
+</div> }
+{/*       <div
         style={{
           marginTop: '10px',
           marginBottom: '10px',
@@ -283,7 +329,7 @@ const ordenesAprobadas =
             ?.total
         }
 
-      </div>
+      </div> */}
 
       <input
         placeholder="Monto"

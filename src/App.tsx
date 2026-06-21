@@ -21,6 +21,8 @@ import StockMovements from './pages/StockMovements';
 import Payments from './pages/Payments';
 import Reports from './pages/Reports';
 import Audit from './pages/Audit';
+import EmpresasPage from './features/empresas/pages/EmpresasPage';
+import LayoutSaas from './features/components/saas/LayoutSaas';
 
 function App() {
 
@@ -176,6 +178,14 @@ return (
         <Layout>
           <Audit />
         </Layout>
+      }
+    />
+        <Route
+      path="/saas/empresas"
+      element={
+        <LayoutSaas>
+          <EmpresasPage />
+        </LayoutSaas>
       }
     />
 

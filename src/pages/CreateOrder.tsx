@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api/api';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreateOrder() {
 
@@ -12,16 +13,14 @@ export default function CreateOrder() {
   const [clientId, setClientId] =
     useState('');
 
-  const [productId, setProductId] =
-    useState('');
-
-  const [quantity, setQuantity] =
-    useState(1);
+  const [search, setSearch] =
+  useState('');
 
   const [items, setItems] =
     useState<any[]>([]);
-
-  useEffect(() => {
+  
+  const navigate = useNavigate();
+    useEffect(() => {
 
     loadClients();
     loadProducts();
@@ -56,56 +55,7 @@ export default function CreateOrder() {
 
     };
 
-const addItem = () => {
 
-  const product = products.find(
-    (p) =>
-      p.id_articulo === productId,
-  );
-
-  if (!product) return;
-
-  const existente = items.find(
-    (i) =>
-      i.id_articulo === product.id_articulo,
-  );
-
-  if (existente) {
-
-    setItems(
-      items.map((i) =>
-        i.id_articulo === product.id_articulo
-          ? {
-              ...i,
-              cantidad:
-                i.cantidad + quantity,
-            }
-          : i,
-      ),
-    );
-
-  } else {
-
-    setItems([
-      ...items,
-      {
-        id_articulo:
-          product.id_articulo,
-        descripcion_articulo:
-          product.descripcion,
-        cantidad: quantity,
-        precio_unitario: Number(
-          product.precio_final,
-        ),
-      },
-    ]);
-
-  }
-
-  setProductId('');
-  setQuantity(1);
-
-};
 
   const total =
     items.reduce(
@@ -143,8 +93,6 @@ const addItem = () => {
           'Orden creada',
         );
         setClientId('');
-        setProductId('');
-        setQuantity(1);
         setItems([]);
       } catch (error) {
 
@@ -153,7 +101,152 @@ const addItem = () => {
       }
 
     };
+const saveApproveAndPay = async () => {
+  try {
+    const selectedClient = clients.find(
+      (c) =>
+        String(c.id_cliente) === String(clientId),
+    );
 
+    const response = await api.post(
+      '/orders',
+      {
+        id_cliente: clientId,
+        observaciones: '',
+        items,
+      },
+    );
+
+
+    if (items.length === 0) {
+      alert('Debe agregar al menos un producto');
+      return;
+    }
+
+    if (total <= 0) {
+      alert('El total debe ser mayor a cero');
+      return;
+    }
+
+    const orderId =
+      response.data.id_orden_compra;
+
+    // Aprobar automáticamente
+    await api.patch(
+      `/orders/${orderId}`,
+      {
+        estado: 'APROBADA',
+      },
+    );
+
+    // Si es Consumidor Final, cobrar automáticamente
+    if (selectedClient?.es_consumidor_final) {
+      if (total <= 0) {
+        throw new Error(
+          'No se puede registrar un pago por un importe cero',
+        );
+      }
+      await api.post('/payments', {
+        id_orden_compra: String(orderId),
+        monto: (Math.round(total * 100) / 100).toFixed(2),
+        metodo_pago: 'EFECTIVO',
+        observaciones: 'Pago automático Consumidor Final',
+      });
+
+      alert(
+        'Venta al contado registrada correctamente',
+      );
+
+      setClientId('');
+      setItems([]);
+
+      navigate('/orders');
+
+      return;
+    }
+
+    // Cliente común: ir a pantalla de pagos
+    setClientId('');
+    setItems([]);
+
+    navigate(
+      `/payments?order=${orderId}`,
+    );
+  } catch (error: any) {
+  console.error('ERROR COMPLETO:', error);
+
+  console.log('response:', error.response);
+
+  alert(
+    error?.response?.data?.message ||
+    'Error al guardar, aprobar y cobrar',
+  );
+}
+};
+  const filteredProducts =
+  products.filter(
+    (p) =>
+      p.descripcion
+        .toLowerCase()
+        .includes(
+          search.toLowerCase(),
+        ) ||
+      p.codigo
+        ?.toLowerCase()
+        .includes(
+          search.toLowerCase(),
+        ),
+  );
+  const addProduct =
+  (product: any) => {
+
+    const existente =
+      items.find(
+        (i) =>
+          i.id_articulo ===
+          product.id_articulo,
+      );
+
+    if (existente) {
+
+      setItems(
+        items.map((i) =>
+          i.id_articulo ===
+          product.id_articulo
+            ? {
+                ...i,
+                cantidad:
+                  i.cantidad + 1,
+              }
+            : i,
+        ),
+      );
+
+    } else {
+
+      setItems([
+        ...items,
+        {
+          id_articulo:
+            product.id_articulo,
+          descripcion_articulo:
+            product.descripcion,
+          cantidad:
+            product.unidad_medida === 'KG'
+              ? 0.001
+              : 1,
+          precio_unitario:
+            Number(
+              product.precio_final,
+            ),
+        },
+      ]);
+
+    }
+
+    setSearch('');
+
+  };
   return (
 
     <div>
@@ -201,85 +294,150 @@ const addItem = () => {
       <br />
       <br />
 
-      <select
-        value={productId}
-        onChange={(e) =>
-          setProductId(
-            e.target.value,
-          )
-        }
-      >
+<input
+  placeholder="🔎 Buscar producto..."
+  value={search}
+  onChange={(e) =>
+    setSearch(
+      e.target.value,
+    )
+  }
+/>
 
-        <option value="">
-          Producto
-        </option>
+<div
+  style={{
+    maxHeight: '200px',
+    overflowY: 'auto',
+    border: '1px solid #ccc',
+    marginTop: '10px',
+  }}
+>
 
-        {products.map(
-          (product) => (
+  {search !== '' &&
+    filteredProducts.map(
+      (product) => (
 
-            <option
-              key={
-                product.id_articulo
-              }
-              value={
-                product.id_articulo
-              }
-            >
+        <div
+          key={
+            product.id_articulo
+          }
+          style={{
+            padding: '8px',
+            cursor: 'pointer',
+          }}
+          onClick={() =>
+            addProduct(
+              product,
+            )
+          }
+        >
 
-              {product.descripcion}
+          <strong>
+            {
+              product.descripcion
+            }
+          </strong>
 
-            </option>
+          {' - $'}
 
-          ),
-        )}
+          {
+            product.precio_final
+          }
 
-      </select>
+          {' - Stock: '}
 
-      <input
-        type="number"
-        value={quantity}
-        onChange={(e) =>
-          setQuantity(
-            Number(
-              e.target.value,
-            ),
-          )
-        }
-      />
+          {
+            product.stock_actual
+          }
 
-      <button
-        onClick={addItem}
-      >
+        </div>
 
-        Agregar
+      ),
+    )}
 
-      </button>
-
+</div>
       <hr />
 
-      <h2>
-        Items
-      </h2>
+<h2>
+  Items
+</h2>
 
-      {items.map(
-        (item, index) => (
+<table border={1}>
 
-          <div key={index}>
+  <thead>
 
+    <tr>
+
+      <th>Producto</th>
+
+      <th>Cantidad</th>
+
+      <th>Precio</th>
+
+      <th>Subtotal</th>
+
+      <th>Unidad</th>
+
+    </tr>
+
+  </thead>
+
+  <tbody>
+
+    {items.map(
+      (item, index) => (
+
+        <tr key={index}>
+
+          <td>
             {item.descripcion_articulo}
+          </td>
 
-            {' - '}
-
-            {item.cantidad}
-
-            {' x '}
-
-            {item.precio_unitario}
-
-          </div>
-
+          <td>
+            <td>
+  <input
+    type="number"
+    step="0.01"
+    min="0.01"
+    value={item.cantidad}
+    onChange={(e) =>
+      setItems(
+        items.map((i) =>
+          i.id_articulo === item.id_articulo
+            ? {
+                ...i,
+                cantidad: Number(e.target.value),
+              }
+            : i,
         ),
-      )}
+      )
+    }
+    style={{ width: '80px' }}
+  />
+</td>
+          </td>
+
+          <td>
+            ${item.precio_unitario}
+          </td>
+
+          <td>
+            $
+            {item.cantidad *
+              item.precio_unitario}
+          </td>
+          <td>{item.unidad_medida}</td>
+
+        </tr>
+
+      ),
+    )}
+
+  </tbody>
+
+</table>
+
+
 
       <hr />
 
@@ -291,13 +449,25 @@ const addItem = () => {
 
       </h2>
 
-      <button
-        onClick={saveOrder}
-      >
+<button
+  onClick={saveOrder}
+>
 
-        Guardar Orden
+  💾 Guardar Borrador
 
-      </button>
+</button>
+
+{' '}
+
+<button
+  onClick={
+    saveApproveAndPay
+  }
+>
+
+  🟢 Finalizar Venta
+
+</button>
 
     </div>
 

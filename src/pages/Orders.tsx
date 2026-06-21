@@ -76,12 +76,12 @@ export default function Orders() {
           `/orders/${id}`,
           {
             estado:
-              'CANCELADA',
+              'ANULADA',
           },
         );
 
         alert(
-          'Orden cancelada',
+          'Orden anulada',
         );
 
         loadOrders();
@@ -190,13 +190,6 @@ export default function Orders() {
                 </td>
 <td>
 
-  <Link
-    to={`/orders/${order.id_orden_compra}`}
-  >
-    Ver
-  </Link>
-
-  {' '}
 
   {order.estado === 'PENDIENTE' && (
 
@@ -220,37 +213,50 @@ export default function Orders() {
           )
         }
       >
-        Cancelar
+        Anular
       </button>
     </>
 
   )}
 
-  {order.estado === 'APROBADA' && (
+{order.estado === 'APROBADA' && (
 
-    <>
-      {' '}
+  <>
+    <Link
+      to={`/orders/${order.id_orden_compra}`}
+    >
+      Ver
+    </Link>
 
-      <button
-        onClick={() =>
-          cancelOrder(
-            order.id_orden_compra,
-          )
-        }
-      >
-        Cancelar
-      </button>
+    {' '}
 
-    </>
+    <Link
+      to={`/payments?order=${order.id_orden_compra}`}
+    >
+      Pagar
+    </Link>
 
-  )}
+    {' '}
 
-  {order.estado === 'CANCELADA' && (
+    <button
+      onClick={() =>
+        cancelOrder(
+          order.id_orden_compra,
+        )
+      }
+    >
+      Anular
+    </button>
+  </>
+
+)}
+
+  {order.estado === 'ANULADA' && (
 
     <>
       {' '}
       <span>
-        Cancelada
+        Anulada
       </span>
     </>
 

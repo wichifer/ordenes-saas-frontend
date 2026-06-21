@@ -9,39 +9,28 @@ export default function Login() {
   const [password, setPassword] =
     useState('');
 
-  const handleLogin = async () => {
+ const handleLogin = async () => {
+  try {
+    const response = await api.post("/auth/login", {
+      email,
+      password,
+    });
 
-    try {
+    console.log("LOGIN OK", response.data);
 
-      const response =
-        await api.post(
-          '/auth/login',
-          {
-            email,
-            password,
-          },
-        );
+    localStorage.setItem("token", response.data.token);
 
-      console.log(response.data,);
+    console.log(
+      "TOKEN GUARDADO:",
+      localStorage.getItem("token")
+    );
 
-
-      localStorage.setItem(
-        'token',
-        response.data.token,
-        
-      );
-      window.location.href = '/dashboard';
-
-      alert('Login correcto');
-      
-
-    } catch {
-
-      alert('Error de login');
-
-    }
-
-  };
+    window.location.href = "/dashboard";
+  } catch (error) {
+    console.error(error);
+    alert("Error de login");
+  }
+};
 
   return (
 
