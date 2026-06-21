@@ -1,9 +1,32 @@
+import { useEffect, useState } from 'react';
+import { api } from '../../../api/api';
+import type { Empresa } from '../../../types/empresa';
+
 export default function EmpresasPage() {
+  const [empresas, setEmpresas] = useState<Empresa[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    cargarEmpresas();
+  }, []);
+
+  async function cargarEmpresas() {
+    try {
+      const response = await api.get('/admin-saas/empresas');
+
+      console.log('Empresas:', response.data);
+
+      setEmpresas(response.data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <div>
-
       <div className="flex justify-between items-center mb-6">
-
         <h1 className="text-3xl font-bold">
           Empresas
         </h1>
@@ -20,11 +43,9 @@ export default function EmpresasPage() {
         >
           Nueva Empresa
         </button>
-
       </div>
 
       <div className="bg-white rounded-lg shadow p-4">
-
         <input
           type="text"
           placeholder="Buscar empresa..."
@@ -38,7 +59,6 @@ export default function EmpresasPage() {
         />
 
         <div className="overflow-x-auto">
-
           <table className="w-full">
 
             <thead>
@@ -51,19 +71,62 @@ export default function EmpresasPage() {
             </thead>
 
             <tbody>
-              <tr>
-                <td className="p-3">
-                  Sin datos
-                </td>
-              </tr>
+
+              {loading ? (
+                <tr>
+                  <td className="p-3" colSpan={4}>
+                    Cargando...
+                  </td>
+                </tr>
+              ) : empresas.length === 0 ? (
+                <tr>
+                  <td className="p-3" colSpan={4}>
+                    Sin datos
+                  </td>
+                </tr>
+              ) : (
+                empresas.map((empresa) => (
+                  <tr
+                    key={empresa.id_empresa}
+                    className="border-b"
+                  >
+                    <td className="p-3">
+                      {empresa.razon_social}
+                    </td>
+
+                    <td className="p-3">
+                      {empresa.cuit ?? '-'}
+                    </td>
+
+                    <td className="p-3">
+                      {empresa.email}
+                    </td>
+
+                    <td className="p-3">
+                      <span
+                        className={`
+                          px-2 py-1 rounded-full text-sm
+                          ${
+                            empresa.estado
+                              ? 'bg-green-100 text-green-700'
+                              : 'bg-red-100 text-red-700'
+                          }
+                        `}
+                      >
+                        {empresa.estado
+                          ? 'Activa'
+                          : 'Inactiva'}
+                      </span>
+                    </td>
+                  </tr>
+                ))
+              )}
+
             </tbody>
 
           </table>
-
         </div>
-
       </div>
-
     </div>
   );
 }
