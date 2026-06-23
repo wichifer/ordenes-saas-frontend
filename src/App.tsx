@@ -23,7 +23,7 @@ import Reports from './pages/Reports';
 import Audit from './pages/Audit';
 import EmpresasPage from './features/empresas/pages/EmpresasPage';
 import LayoutSaas from './features/components/saas/LayoutSaas';
-
+import ProtectedRoute from './features/components/saas/ProtectedRoute'
 function App() {
 
 return (
@@ -180,14 +180,16 @@ return (
         </Layout>
       }
     />
-        <Route
-      path="/saas/empresas"
-      element={
-        <LayoutSaas>
-          <EmpresasPage />
-        </LayoutSaas>
-      }
-    />
+     <Route
+        path="/saas/empresas"
+        element={
+          <ProtectedRoute>
+            <LayoutSaas>
+              <EmpresasPage />
+            </LayoutSaas>
+          </ProtectedRoute>
+        }
+      />
 
   </Routes>
 

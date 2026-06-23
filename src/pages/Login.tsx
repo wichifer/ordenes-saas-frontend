@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import { api } from '../api/api';
 
 export default function Login() {
+  const navigate = useNavigate();
 
   const [email, setEmail] =
     useState('');
@@ -9,29 +11,30 @@ export default function Login() {
   const [password, setPassword] =
     useState('');
 
- const handleLogin = async () => {
+const handleLogin = async () => {
   try {
     const response = await api.post("/auth/login", {
       email,
       password,
     });
 
-    console.log("LOGIN OK", response.data);
-
-    localStorage.setItem("token", response.data.token);
-
-    console.log(
-      "TOKEN GUARDADO:",
-      localStorage.getItem("token")
+    localStorage.setItem(
+      "token",
+      response.data.token
     );
 
-    window.location.href = "/dashboard";
+    localStorage.setItem(
+      "usuario",
+      JSON.stringify(response.data.usuario)
+    );
+
+    // redireccionar
+    navigate("/saas/empresas");
+
   } catch (error) {
     console.error(error);
-    alert("Error de login");
   }
 };
-
   return (
 
     <div>
