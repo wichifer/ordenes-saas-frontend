@@ -1,0 +1,69 @@
+Listado de rutas de carpetas
+El n£mero de serie del volumen es 4829-F88C
+C:.
+³   App.css
+³   App.tsx
+³   arbol.txt
+³   index.css
+³   main.tsx
+³   
+ÃÄÄÄapi
+³       api.ts
+³       
+ÃÄÄÄassets
+³       hero.png
+³       react.svg
+³       vite.svg
+³       
+ÃÄÄÄcomponents
+³   ³   Layout.tsx
+³   ³   Sidebar.tsx
+³   ³   
+³   ÃÄÄÄlayout
+³   ³       DashboardLayout.tsx
+³   ³       Header.tsx
+³   ³       Sidebar.tsx
+³   ³       
+³   ÀÄÄÄui
+ÃÄÄÄfeatures
+³   ÃÄÄÄcomponents
+³   ³   ÀÄÄÄsaas
+³   ³           HeaderSaas.tsx
+³   ³           LayoutSaas.tsx
+³   ³           SidebarSaas.tsx
+³   ³           
+³   ÃÄÄÄempresas
+³   ³   ÃÄÄÄapi
+³   ³   ÃÄÄÄcomponents
+³   ³   ³       EmpresaForm.jsx
+³   ³   ³       
+³   ³   ÃÄÄÄhooks
+³   ³   ÃÄÄÄpages
+³   ³   ³       Empresas.jsx
+³   ³   ³       EmpresasPage.tsx
+³   ³   ³       
+³   ³   ÀÄÄÄtypes
+³   ÀÄÄÄroutes
+ÃÄÄÄpages
+³       Audit.tsx
+³       Cash.tsx
+³       Clients.tsx
+³       CreateClient.tsx
+³       CreateOrder.tsx
+³       CreateProduct.tsx
+³       Dashboard.tsx
+³       EditClient.tsx
+³       EditProduct.tsx
+³       Login.tsx
+³       LowStock.tsx
+³       OrderDetail.tsx
+³       Orders.tsx
+³       Payments.tsx
+³       Products.tsx
+³       Reports.tsx
+³       StockMovements.tsx
+³       
+ÃÄÄÄroutes
+ÀÄÄÄtypes
+        empresa.ts
+        

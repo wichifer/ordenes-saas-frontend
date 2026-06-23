@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 import { api } from '../../../api/api';
 import type { Empresa } from '../../../types/empresa';
+import EmpresaForm from '../components/EmpresaForm';
 
 export default function EmpresasPage() {
   const [empresas, setEmpresas] = useState<Empresa[]>([]);
   const [loading, setLoading] = useState(true);
+const [mostrarFormulario, setMostrarFormulario] =
 
+  useState(false);
   useEffect(() => {
     cargarEmpresas();
   }, []);
@@ -31,20 +34,34 @@ export default function EmpresasPage() {
           Empresas
         </h1>
 
-        <button
-          className="
-            bg-blue-600
-            hover:bg-blue-700
-            text-white
-            px-4
-            py-2
-            rounded-lg
-          "
-        >
-          Nueva Empresa
-        </button>
+ <button
+  onClick={() =>
+    setMostrarFormulario(!mostrarFormulario)
+  }
+  className="
+    bg-blue-600
+    hover:bg-blue-700
+    text-white
+    px-4
+    py-2
+    rounded-lg
+  "
+>
+  {mostrarFormulario
+    ? 'Cerrar'
+    : 'Nueva Empresa'}
+</button>
       </div>
-
+{mostrarFormulario && (
+  <div className="mb-6">
+    <EmpresaForm
+      onEmpresaCreada={() => {
+        cargarEmpresas();
+        setMostrarFormulario(false);
+      }}
+    />
+  </div>
+)}
       <div className="bg-white rounded-lg shadow p-4">
         <input
           type="text"
