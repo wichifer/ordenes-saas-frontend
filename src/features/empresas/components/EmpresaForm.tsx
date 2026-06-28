@@ -1,38 +1,45 @@
 import { useState } from 'react';
 import { api } from '../../../api/api';
 
+interface EmpresaFormProps {
+  onEmpresaCreada: () => void;
+}
+
 export default function EmpresaForm({
   onEmpresaCreada,
-}) {
+}: EmpresaFormProps) {
 
   const [razonSocial, setRazonSocial] =
-    useState('');
+    useState<string>('');
 
   const [cuit, setCuit] =
-    useState('');
+    useState<string>('');
 
   const [email, setEmail] =
-    useState('');
+    useState<string>('');
 
   const [telefono, setTelefono] =
-    useState('');
+    useState<string>('');
 
   const [direccion, setDireccion] =
-    useState('');
+    useState<string>('');
 
   const [nombre, setNombre] =
-    useState('');
+    useState<string>('');
 
   const [apellido, setApellido] =
-    useState('');
+    useState<string>('');
 
   const [usuarioEmail, setUsuarioEmail] =
-    useState('');
+    useState<string>('');
 
   const [password, setPassword] =
-    useState('');
+    useState<string>('');
 
-  const guardarEmpresa = async (e) => {
+  const guardarEmpresa = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+
     e.preventDefault();
 
     try {
@@ -70,7 +77,7 @@ export default function EmpresaForm({
 
       onEmpresaCreada();
 
-    } catch (error) {
+    } catch (error: any) {
 
       console.error(error);
 

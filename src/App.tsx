@@ -23,11 +23,12 @@ import Reports from './pages/Reports';
 import Audit from './pages/Audit';
 import EmpresasPage from './features/empresas/pages/EmpresasPage';
 import LayoutSaas from './features/components/saas/LayoutSaas';
-import ProtectedRoute from './features/components/saas/ProtectedRoute'
+import ProtectedRoute from './features/components/saas/ProtectedRoute';
+import GlobalModal from './store/components/GlobalModal';
 function App() {
 
 return (
-
+<>
 <BrowserRouter>
 
   <Routes>
@@ -190,12 +191,14 @@ return (
           </ProtectedRoute>
         }
       />
+      
 
   </Routes>
 
 </BrowserRouter>
 
-
+<GlobalModal />
+</>
 );
 
 }
