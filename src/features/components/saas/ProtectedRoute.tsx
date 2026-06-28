@@ -9,16 +9,8 @@ export default function ProtectedRoute({
 }: Props) {
   const token = localStorage.getItem("token");
 
-  const usuario = JSON.parse(
-    localStorage.getItem("usuario") || "{}"
-  );
-
   if (!token) {
-    return <Navigate to="/login" replace />;
-  }
-
-  if (usuario.rol !== "ADMIN_SAAS") {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;

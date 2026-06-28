@@ -17,7 +17,7 @@ const handleLogin = async () => {
       email,
       password,
     });
-
+console.log(response.data.usuario);
     localStorage.setItem(
       "token",
       response.data.token
@@ -31,9 +31,12 @@ const handleLogin = async () => {
     // redireccionar
     navigate("/saas/empresas");
 
-  } catch (error) {
-    console.error(error);
-  }
+    } catch (error: any) {
+      console.error(
+        "Error login:",
+        error.response?.data
+      );
+    }   
 };
   return (
 
