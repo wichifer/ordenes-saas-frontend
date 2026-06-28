@@ -200,7 +200,5 @@ return (
 <GlobalModal />
 </>
 );
-
 }
-
 export default App;
