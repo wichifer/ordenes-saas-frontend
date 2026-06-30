@@ -25,6 +25,8 @@ import EmpresasPage from './features/empresas/pages/EmpresasPage';
 import LayoutSaas from './features/components/saas/LayoutSaas';
 import ProtectedRoute from './features/components/saas/ProtectedRoute';
 import GlobalModal from './store/components/GlobalModal';
+import { Toaster } from "sonner";
+import GlobalLoading from "./components/GlobalLoading";
 function App() {
 
 return (
@@ -196,7 +198,10 @@ return (
   </Routes>
 
 </BrowserRouter>
+  
+   <Toaster richColors position="top-right" />
 
+    <GlobalLoading />
 <GlobalModal />
 </>
 );

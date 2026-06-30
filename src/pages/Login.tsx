@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
 import { Building2 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -45,15 +46,22 @@ export default function Login() {
           response.data.usuario
         )
       );
-
+      toast.success("Bienvenido al panel SaaS");
       navigate("/saas/empresas");
 
-    } catch (error: any) {
-      console.error(
-        "Error login:",
-        error.response?.data
-      );
-    } finally {
+} catch (error: any) {
+
+  console.error(
+    "Error login:",
+    error.response?.data
+  );
+
+  toast.error(
+    error.response?.data?.message ||
+    "Error al iniciar sesión"
+  );
+
+} finally {
       setLoading(false);
     }
   };
@@ -170,6 +178,8 @@ export default function Login() {
 
         </Card>
       </div>
+      
     </div>
   );
+
 }
