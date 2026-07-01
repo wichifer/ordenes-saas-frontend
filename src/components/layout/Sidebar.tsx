@@ -1,18 +1,8 @@
+/* src/components/layout/Sidebar.tsx*/
 import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import {
-  LayoutDashboard,
-  Users,
-  Box,
-  Building2,
-} from "lucide-react";
+import { navigation } from "./navigation";
 
-const items = [
-  { label: "Dashboard", icon: LayoutDashboard, to: "/" },
-  { label: "Clientes", icon: Users, to: "/clients" },
-  { label: "Productos", icon: Box, to: "/products" },
-  { label: "Empresas", icon: Building2, to: "/empresas" },
-];
 
 export default function Sidebar() {
   return (
@@ -36,13 +26,13 @@ export default function Sidebar() {
 
       {/* Nav */}
       <nav className="flex-1 p-2 space-y-1">
-        {items.map((item) => {
+        {navigation.map((item) => {
           const Icon = item.icon;
 
           return (
             <NavLink
-              key={item.to}
-              to={item.to}
+              key={item.href}
+              to={item.href}
               className={({ isActive }) =>
                 cn(
                   "flex items-center gap-3 px-3 py-2 rounded-md text-sm transition w-full truncate",
