@@ -1,17 +1,20 @@
+/* src/components/Sidebar.tsx */
 import { Link } from 'react-router-dom';
 
 export default function Sidebar() {
 
   return (
 
-    <div
-      style={{
-        width: '220px',
-        minHeight: '100vh',
-        borderRight: '1px solid #ccc',
-        padding: '20px',
-      }}
-    >
+<div
+  style={{
+    width: "220px",
+    minHeight: "100vh",
+    borderRight: "1px solid #ccc",
+    padding: "20px",
+    background: "#111827",
+    color: "#ffffff",
+  }}
+>
 
       <h2>POS SaaS</h2>
 

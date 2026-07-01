@@ -1,63 +1,62 @@
 import { NavLink } from "react-router-dom";
-import Logo from "./Logo";
+import { cn } from "@/lib/utils";
 import {
-  Building2,
   LayoutDashboard,
+  Users,
+  Box,
+  Building2,
 } from "lucide-react";
 
-const menu = [
-  {
-    label: "Dashboard",
-    path: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    label: "Empresas",
-    path: "/saas/empresas",
-    icon: Building2,
-  },
+const items = [
+  { label: "Dashboard", icon: LayoutDashboard, to: "/" },
+  { label: "Clientes", icon: Users, to: "/clients" },
+  { label: "Productos", icon: Box, to: "/products" },
+  { label: "Empresas", icon: Building2, to: "/empresas" },
 ];
 
 export default function Sidebar() {
   return (
     <aside
       className="
-      hidden md:flex
-      w-64
-      border-r
-      bg-background
-      flex-col
+        hidden md:flex
+        w-64 shrink-0
+        flex-col
+        border-r border-border
+        bg-sidebar
+        text-sidebar-foreground
+        min-h-screen
       "
     >
-      <div className="h-16 px-6 flex items-center border-b">
-        <Logo />
+      {/* Header */}
+      <div className="h-14 flex items-center px-4 border-b border-sidebar-border">
+        <span className="font-bold text-sm text-sidebar-foreground">
+          SaaS T420
+        </span>
       </div>
 
-      <nav className="flex-1 p-4 space-y-2">
-        {menu.map((item) => {
+      {/* Nav */}
+      <nav className="flex-1 p-2 space-y-1">
+        {items.map((item) => {
           const Icon = item.icon;
 
           return (
             <NavLink
-              key={item.path}
-              to={item.path}
+              key={item.to}
+              to={item.to}
               className={({ isActive }) =>
-                `
-                flex items-center gap-3
-                rounded-lg
-                px-3 py-2
-                transition
-                hover:bg-muted
-                ${
+                cn(
+                  "flex items-center gap-3 px-3 py-2 rounded-md text-sm transition w-full truncate",
+                  "hover:bg-sidebar-primary/10 hover:text-sidebar-foreground",
                   isActive
-                    ? "bg-muted font-medium"
-                    : ""
-                }
-              `
+                    ? "bg-sidebar-primary text-white"
+                    : "text-sidebar-foreground/90"
+                )
               }
             >
-              <Icon size={18} />
-              {item.label}
+              <Icon className="h-4 w-4" />
+              <span className="truncate">
+                {item.label}
+              </span>
             </NavLink>
           );
         })}

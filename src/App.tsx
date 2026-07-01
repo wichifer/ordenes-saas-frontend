@@ -1,8 +1,7 @@
 import {
-BrowserRouter,
-Routes,
-Route,
-} from 'react-router-dom';
+  Routes,
+  Route,
+} from "react-router-dom";
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -31,7 +30,6 @@ function App() {
 
 return (
 <>
-<BrowserRouter>
 
   <Routes>
 
@@ -197,7 +195,7 @@ return (
 
   </Routes>
 
-</BrowserRouter>
+
   
    <Toaster richColors position="top-right" />
 

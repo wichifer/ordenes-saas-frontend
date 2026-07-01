@@ -1,38 +1,24 @@
-import React from 'react';
+import type { ReactNode } from "react";
 
-import Sidebar from './Sidebar';
+import Sidebar from "./Sidebar";
+import Header from "./Header";
 
 type LayoutProps = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
-export default function Layout({
-  children,
-}: LayoutProps) {
-
+export default function Layout({ children }: LayoutProps) {
   return (
-
-    <div
-      style={{
-        display: 'flex',
-      }}
-    >
-
+    <div className="flex min-h-screen bg-red-500">
       <Sidebar />
 
-      <div
-        style={{
-          flex: 1,
-          padding: '20px',
-        }}
-      >
+      <div className="flex flex-1 flex-col">
+        <Header />
 
-        {children}
-
+        <main className="flex-1 p-6">
+          {children}
+        </main>
       </div>
-
     </div>
-
   );
-
 }

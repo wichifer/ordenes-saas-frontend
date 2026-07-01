@@ -1,0 +1,125 @@
+Listado de rutas de carpetas
+El n£mero de serie del volumen es 4829-F88C
+C:.
+³   App.css
+³   App.tsx
+³   estructura.txt
+³   index.css
+³   main.tsx
+³   
+ÃÄÄÄapi
+³       api.ts
+³       
+ÃÄÄÄassets
+³       hero.png
+³       react.svg
+³       vite.svg
+³       
+ÃÄÄÄcomponents
+³   ³   GlobalLoading.tsx
+³   ³   Header.tsx
+³   ³   Layout.tsx
+³   ³   ModeToggle.tsx
+³   ³   Sidebar.tsx
+³   ³   theme-provider.tsx
+³   ³   
+³   ÃÄÄÄcommon
+³   ³       ConfirmDialog.tsx
+³   ³       EmptyState.tsx
+³   ³       Loading.tsx
+³   ³       PageHeader.tsx
+³   ³       Section.tsx
+³   ³       
+³   ÃÄÄÄlayout
+³   ³       AppLayout.tsx
+³   ³       DashboardLayout.tsx
+³   ³       Header.tsx
+³   ³       Logo.tsx
+³   ³       MobileSidebar.tsx
+³   ³       PageContainer.tsx
+³   ³       Sidebar.tsx
+³   ³       UserMenu.tsx
+³   ³       
+³   ÃÄÄÄmodals
+³   ³       GlobalModal.tsx
+³   ³       
+³   ÃÄÄÄshared
+³   ÃÄÄÄtheme
+³   ³       ThemeProvider.tsx
+³   ³       ThemeToggle.tsx
+³   ³       
+³   ÀÄÄÄui
+³           alert-dialog.tsx
+³           avatar.tsx
+³           button.tsx
+³           card.tsx
+³           dialog.tsx
+³           dropdown-menu.tsx
+³           input.tsx
+³           label.tsx
+³           select.tsx
+³           separator.tsx
+³           sheet.tsx
+³           sonner.tsx
+³           table.tsx
+³           textarea.tsx
+³           
+ÃÄÄÄfeatures
+³   ÃÄÄÄcomponents
+³   ³   ÀÄÄÄsaas
+³   ³           Breadcrumbs.tsx
+³   ³           HeaderSaas.tsx
+³   ³           LayoutSaas.tsx
+³   ³           ProtectedRoute.tsx
+³   ³           SidebarSaas.tsx
+³   ³           
+³   ÃÄÄÄempresas
+³   ³   ÃÄÄÄapi
+³   ³   ³       empresasApi.ts
+³   ³   ³       
+³   ³   ÃÄÄÄcomponents
+³   ³   ³       EmpresaForm.tsx
+³   ³   ³       
+³   ³   ÃÄÄÄhooks
+³   ³   ÃÄÄÄpages
+³   ³   ³       Empresas.tsx
+³   ³   ³       EmpresasPage.tsx
+³   ³   ³       
+³   ³   ÀÄÄÄtypes
+³   ³           empresa.ts
+³   ³           
+³   ÀÄÄÄroutes
+ÃÄÄÄhooks
+ÃÄÄÄlib
+³       utils.ts
+³       
+ÃÄÄÄpages
+³       Audit.tsx
+³       Cash.tsx
+³       Clients.tsx
+³       CreateClient.tsx
+³       CreateOrder.tsx
+³       CreateProduct.tsx
+³       Dashboard.tsx
+³       EditClient.tsx
+³       EditProduct.tsx
+³       Login.tsx
+³       LowStock.tsx
+³       OrderDetail.tsx
+³       Orders.tsx
+³       Payments.tsx
+³       Products.tsx
+³       Reports.tsx
+³       StockMovements.tsx
+³       
+ÃÄÄÄroutes
+ÃÄÄÄstore
+³   ³   loadingStore.ts
+³   ³   modalStore.ts
+³   ³   
+³   ÀÄÄÄcomponents
+³           GlobalModal.tsx
+³           
+ÀÄÄÄtypes
+        empresa.ts
+        

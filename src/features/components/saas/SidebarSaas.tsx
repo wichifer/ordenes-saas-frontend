@@ -1,43 +1,78 @@
 import { Link } from 'react-router-dom';
 
-export default function SidebarSaas() {
+export default function Sidebar() {
+
   return (
-    <aside className="w-64 bg-slate-900 text-white min-h-screen p-4">
 
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold">
-          T420 SaaS
-        </h1>
+    <div
+      style={{
+        width: '220px',
+        minHeight: '100vh',
+        borderRight: '1px solid #ccc',
+        padding: '20px',
+      }}
+    >
 
-        <p className="text-sm text-slate-400">
-          Panel Administrador
-        </p>
-      </div>
+      <h2>POS SaaS</h2>
 
-      <nav className="space-y-2">
+      <hr />
 
-        <Link
-          to="/saas/empresas"
-          className="block p-3 rounded hover:bg-slate-800"
-        >
-          🏢 Empresas
+      <p>
+        <Link to="/dashboard">
+          Dashboard
         </Link>
+      </p>
 
-        <Link
-          to="#"
-          className="block p-3 rounded hover:bg-slate-800"
-        >
-          👥 Usuarios
+      <p>
+        <Link to="/clients">
+          Clientes
         </Link>
+      </p>
 
-        <Link
-          to="#"
-          className="block p-3 rounded hover:bg-slate-800"
-        >
-          ⚙ Configuración
+      <p>
+        <Link to="/products">
+          Productos
         </Link>
+      </p>
 
-      </nav>
-    </aside>
+      <p>
+        <Link to="/orders">
+          Órdenes
+        </Link>
+      </p>
+
+      <p>
+        <Link to="/payments">
+          Pagos
+        </Link>
+      </p>
+
+      <p>
+        <Link to="/cash">
+          Caja
+        </Link>
+      </p>
+
+      <p>
+        <Link to="/stock-movements">
+          Stock
+        </Link>
+      </p>
+
+      <p>
+        <Link to="/reports">
+          Reportes
+        </Link>
+      </p>
+
+      <p>
+        <Link to="/audit">
+          Auditoría
+        </Link>
+      </p>
+
+    </div>
+
   );
+
 }
