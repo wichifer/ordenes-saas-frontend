@@ -1,17 +1,12 @@
-import { Navigate } from "react-router-dom";
+/* src/features/components/saas/ProtectedRoute.tsx */
+import { Navigate, Outlet } from "react-router-dom";
 
-interface Props {
-  children: React.ReactNode;
-}
-
-export default function ProtectedRoute({
-  children,
-}: Props) {
+export default function ProtectedRoute() {
   const token = localStorage.getItem("token");
 
   if (!token) {
     return <Navigate to="/" replace />;
   }
 
-  return <>{children}</>;
+  return <Outlet />;
 }
