@@ -26,6 +26,13 @@ import GlobalModal from "./store/components/GlobalModal";
 import GlobalLoading from "./components/GlobalLoading";
 import { Toaster } from "sonner";
 
+
+import Layout from "./components/layout/AppLayout";
+import Playground from "./pages/Playground";
+
+
+
+
 function App() {
   return (
     <>
@@ -38,7 +45,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           
           <Route element={<AppLayout />}>
-            
+ 
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/clients" element={<Clients />} />
             <Route path="/clients/new" element={<CreateClient />} />
@@ -61,7 +68,7 @@ function App() {
             <Route path="/audit" element={<Audit />} />
 
             <Route path="/saas/empresas" element={<EmpresasPage />} />
-
+           <Route path="/playground" element={<Playground />} />
           </Route>
         </Route>
 
