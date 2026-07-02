@@ -5,6 +5,7 @@ import EmpresaForm from "../components/EmpresaForm";
 import PageHeader from "@/components/common/PageHeader";
 import { Button } from "@/components/ui/button";
 import SearchInput from "@/components/common/SearchInput";
+import LoadingState from "@/components/common/LoadingState";
 
 export default function EmpresasPage() {
   const [empresas, setEmpresas] = useState<Empresa[]>([]);
@@ -63,11 +64,11 @@ const empresasFiltradas = empresas.filter((empresa) =>
       {/* Card */}
       <div className="rounded-xl border bg-card shadow-sm">
         <div className="p-4 border-b">
-<SearchInput
-  placeholder="Buscar empresa..."
-  value={search}
-  onChange={setSearch}
-/>
+          <SearchInput
+            placeholder="Buscar empresa..."
+            value={search}
+            onChange={setSearch}
+          />
         </div>
 
         <div className="overflow-x-auto">
@@ -93,16 +94,13 @@ const empresasFiltradas = empresas.filter((empresa) =>
             </thead>
 
             <tbody>
-              {loading ? (
-                <tr>
-                  <td
-                    colSpan={4}
-                    className="p-6 text-center text-muted-foreground"
-                  >
-                    Cargando...
-                  </td>
-                </tr>
-              ) : empresas.length === 0 ? (
+{loading ? (
+  <tr>
+    <td colSpan={4} className="p-6">
+      <LoadingState message="Cargando empresas..." />
+    </td>
+  </tr>
+) : empresas.length === 0 ? (
                 <tr>
                   <td
                     colSpan={4}
@@ -112,7 +110,7 @@ const empresasFiltradas = empresas.filter((empresa) =>
                   </td>
                 </tr>
               ) : (
-                empresas.map((empresa) => (
+                empresasFiltradas.map((empresa) => (
                   <tr
                     key={empresa.id_empresa}
                     className="border-b transition-colors hover:bg-muted/40"
