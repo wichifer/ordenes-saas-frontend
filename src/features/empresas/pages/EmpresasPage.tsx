@@ -8,17 +8,26 @@ import SearchInput from "@/components/common/SearchInput";
 import LoadingState from "@/components/common/LoadingState";
 import EmptyState from "@/components/common/EmptyState";
 import StatusBadge from "@/components/common/StatusBadge";
+import ConfirmDialog from "@/components/common/ConfirmDialog";
 
 export default function EmpresasPage() {
   const [empresas, setEmpresas] = useState<Empresa[]>([]);
   const [loading, setLoading] = useState(true);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const [empresaAEliminar, setEmpresaAEliminar] = useState<Empresa | null>(null);
 
   const [search, setSearch] = useState("");
   useEffect(() => {
     cargarEmpresas();
   }, []);
-
+async function eliminarEmpresa(id: string) {
+  try {
+    await api.delete(`/empresas/${id}`);
+    cargarEmpresas();
+  } catch (error) {
+    console.error(error);
+  }
+}
   async function cargarEmpresas() {
     try {
       const response = await api.get("/admin-saas/empresas");
@@ -92,6 +101,9 @@ const empresasFiltradas = empresas.filter((empresa) =>
                 <th className="p-4 text-left font-semibold text-foreground">
                   Estado
                 </th>
+                <th className="p-4 text-left font-semibold text-foreground">
+                  Acciones
+                </th>
               </tr>
             </thead>
 
@@ -132,11 +144,30 @@ const empresasFiltradas = empresas.filter((empresa) =>
 <td className="p-4">
 <StatusBadge status={empresa.estado ? "active" : "inactive"} />
 </td>
+<td className="p-4">
+  <button
+    onClick={() => setEmpresaAEliminar(empresa)}
+    className="text-red-600 hover:text-red-800 text-sm"
+  >
+    Eliminar
+  </button>
+</td>
                   </tr>
                 ))
               )}
             </tbody>
           </table>
+          <ConfirmDialog
+  open={!!empresaAEliminar}
+  title="Eliminar empresa"
+  description={`¿Estás seguro de eliminar ${empresaAEliminar?.razon_social}?`}
+  onCancel={() => setEmpresaAEliminar(null)}
+  onConfirm={async () => {
+    if (!empresaAEliminar) return;
+    await eliminarEmpresa(empresaAEliminar.id_empresa);
+    setEmpresaAEliminar(null);
+  }}
+/>
         </div>
       </div>
     </div>
