@@ -4,6 +4,8 @@ import { api } from "../../../api/api";
 import EmpresaForm from "../components/EmpresaForm";
 import PageHeader from "@/components/common/PageHeader";
 import SearchInput from "@/components/common/SearchInput";
+import LoadingState from "@/components/common/LoadingState";
+import EmptyState from "@/components/common/EmptyState";
 
 interface Empresa {
   id_empresa: string;
@@ -36,6 +38,7 @@ const empresasFiltradas = empresas.filter((empresa) =>
   empresa.razon_social.toLowerCase().includes(search.toLowerCase()) ||
   empresa.cuit.toLowerCase().includes(search.toLowerCase())
 );
+const isEmpty = !loading && empresasFiltradas.length === 0;
   return (
     <div className="space-y-6">
 
@@ -54,40 +57,15 @@ const empresasFiltradas = empresas.filter((empresa) =>
       {/* Table container */}
       <div className="bg-card border border-border rounded-lg overflow-hidden">
 
-        {loading ? (
-          <p className="p-4 text-muted-foreground">
-            Cargando...
-          </p>
-        ) : (
-          <table className="w-full text-sm">
-            <thead className="bg-muted text-muted-foreground">
-              <tr>
-                <th className="p-3 text-left">ID</th>
-                <th className="p-3 text-left">Razón Social</th>
-                <th className="p-3 text-left">CUIT</th>
-                <th className="p-3 text-left">Email</th>
-                <th className="p-3 text-left">Estado</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {empresasFiltradas.map((empresa) => (
-                <tr
-                  key={empresa.id_empresa}
-                  className="border-t border-border hover:bg-muted/50"
-                >
-                  <td className="p-3">{empresa.id_empresa}</td>
-                  <td className="p-3">{empresa.razon_social}</td>
-                  <td className="p-3">{empresa.cuit}</td>
-                  <td className="p-3">{empresa.email}</td>
-                  <td className="p-3">
-                    {empresa.estado ? "Activa" : "Inactiva"}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+{loading ? (
+  <LoadingState message="Cargando empresas..." />
+) : isEmpty ? (
+  <EmptyState
+    title="No hay empresas"
+    description="No se encontraron empresas con los filtros aplicados."
+  />
+) : (
+  <table className="w-full text-sm">
 
       </div>
     </div>
