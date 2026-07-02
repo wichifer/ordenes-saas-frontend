@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import SearchInput from "@/components/common/SearchInput";
 import LoadingState from "@/components/common/LoadingState";
 import EmptyState from "@/components/common/EmptyState";
+import StatusBadge from "@/components/common/StatusBadge";
 
 export default function EmpresasPage() {
   const [empresas, setEmpresas] = useState<Empresa[]>([]);
@@ -128,19 +129,9 @@ const empresasFiltradas = empresas.filter((empresa) =>
                       {empresa.email}
                     </td>
 
-                    <td className="p-4">
-                      <span
-                        className={`rounded-full px-3 py-1 text-xs font-medium ${
-                          empresa.estado
-                            ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                            : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
-                        }`}
-                      >
-                        {empresa.estado
-                          ? "Activa"
-                          : "Inactiva"}
-                      </span>
-                    </td>
+<td className="p-4">
+<StatusBadge status={empresa.estado ? "active" : "inactive"} />
+</td>
                   </tr>
                 ))
               )}

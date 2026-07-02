@@ -1,10 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 
-type Status =
-  | "active"
-  | "inactive"
-  | "pending"
-  | "error";
+type Status = "active" | "inactive" | "pending" | "error";
 
 interface StatusBadgeProps {
   status: Status;
@@ -31,18 +27,13 @@ const statusConfig = {
     className:
       "bg-red-100 text-red-700 border-red-200 dark:bg-red-900/30 dark:text-red-300",
   },
-};
+} as const;
 
-export default function StatusBadge({
-  status,
-}: StatusBadgeProps) {
+export default function StatusBadge({ status }: StatusBadgeProps) {
   const config = statusConfig[status];
 
   return (
-    <Badge
-      variant="outline"
-      className={config.className}
-    >
+    <Badge className={config.className}>
       {config.label}
     </Badge>
   );
