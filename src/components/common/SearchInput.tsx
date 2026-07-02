@@ -1,20 +1,23 @@
-import { Search } from "lucide-react";
+import * as React from "react";
 import { Input } from "@/components/ui/input";
-import type { ComponentProps } from "react";
 
-type SearchInputProps = ComponentProps<typeof Input>;
+interface SearchInputProps {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+}
 
 export default function SearchInput({
-  className,
-  ...props
+  value,
+  onChange,
+  placeholder,
 }: SearchInputProps) {
   return (
-    <div className="relative w-full max-w-sm">
-      <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-
+    <div className="w-full">
       <Input
-        {...props}
-        className={`pl-9 ${className ?? ""}`}
+        value={value}
+        placeholder={placeholder}
+        onChange={(e) => onChange(e.target.value)}
       />
     </div>
   );

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { api } from "../../../api/api";
 import EmpresaForm from "../components/EmpresaForm";
 import PageHeader from "@/components/common/PageHeader";
+import SearchInput from "@/components/common/SearchInput";
 
 interface Empresa {
   id_empresa: string;
@@ -13,6 +14,7 @@ interface Empresa {
 }
 
 export default function Empresas() {
+  const [search, setSearch] = useState("");
   const [empresas, setEmpresas] = useState<Empresa[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -30,7 +32,10 @@ export default function Empresas() {
   useEffect(() => {
     cargarEmpresas();
   }, []);
-
+const empresasFiltradas = empresas.filter((empresa) =>
+  empresa.razon_social.toLowerCase().includes(search.toLowerCase()) ||
+  empresa.cuit.toLowerCase().includes(search.toLowerCase())
+);
   return (
     <div className="space-y-6">
 
@@ -38,7 +43,11 @@ export default function Empresas() {
         title="Empresas"
         description="Administración de empresas del sistema."
       />
-
+      <SearchInput
+        placeholder="Buscar por razón social o CUIT..."
+        value={search}
+        onChange={setSearch}
+      />
       {/* Form */}
       <EmpresaForm onEmpresaCreada={cargarEmpresas} />
 
@@ -62,7 +71,7 @@ export default function Empresas() {
             </thead>
 
             <tbody>
-              {empresas.map((empresa) => (
+              {empresasFiltradas.map((empresa) => (
                 <tr
                   key={empresa.id_empresa}
                   className="border-t border-border hover:bg-muted/50"
