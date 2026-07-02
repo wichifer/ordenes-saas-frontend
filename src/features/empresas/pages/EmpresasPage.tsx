@@ -6,6 +6,7 @@ import PageHeader from "@/components/common/PageHeader";
 import { Button } from "@/components/ui/button";
 import SearchInput from "@/components/common/SearchInput";
 import LoadingState from "@/components/common/LoadingState";
+import EmptyState from "@/components/common/EmptyState";
 
 export default function EmpresasPage() {
   const [empresas, setEmpresas] = useState<Empresa[]>([]);
@@ -100,16 +101,16 @@ const empresasFiltradas = empresas.filter((empresa) =>
       <LoadingState message="Cargando empresas..." />
     </td>
   </tr>
-) : empresas.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan={4}
-                    className="p-6 text-center text-muted-foreground"
-                  >
-                    Sin datos
-                  </td>
-                </tr>
-              ) : (
+) : empresasFiltradas.length === 0 ? (
+  <tr>
+    <td colSpan={4} className="p-6">
+      <EmptyState
+        title="No hay empresas"
+        description="No se encontraron empresas con los filtros aplicados."
+      />
+    </td>
+  </tr>
+) : (
                 empresasFiltradas.map((empresa) => (
                   <tr
                     key={empresa.id_empresa}
