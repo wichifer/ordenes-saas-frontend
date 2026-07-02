@@ -4,12 +4,14 @@ import type { Empresa } from "../../../types/empresa";
 import EmpresaForm from "../components/EmpresaForm";
 import PageHeader from "@/components/common/PageHeader";
 import { Button } from "@/components/ui/button";
+import SearchInput from "@/components/common/SearchInput";
 
 export default function EmpresasPage() {
   const [empresas, setEmpresas] = useState<Empresa[]>([]);
   const [loading, setLoading] = useState(true);
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
 
+  const [search, setSearch] = useState("");
   useEffect(() => {
     cargarEmpresas();
   }, []);
@@ -27,7 +29,11 @@ export default function EmpresasPage() {
       setLoading(false);
     }
   }
-
+const empresasFiltradas = empresas.filter((empresa) =>
+  empresa.razon_social.toLowerCase().includes(search.toLowerCase()) ||
+  empresa.cuit.toLowerCase().includes(search.toLowerCase()) ||
+  (empresa.email ?? "").toLowerCase().includes(search.toLowerCase())
+);
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -57,23 +63,11 @@ export default function EmpresasPage() {
       {/* Card */}
       <div className="rounded-xl border bg-card shadow-sm">
         <div className="p-4 border-b">
-          <input
-            type="text"
-            placeholder="Buscar empresa..."
-            className="
-              w-full
-              rounded-lg
-              border
-              bg-background
-              px-3
-              py-2
-              text-foreground
-              placeholder:text-muted-foreground
-              outline-none
-              focus:ring-2
-              focus:ring-primary
-            "
-          />
+<SearchInput
+  placeholder="Buscar empresa..."
+  value={search}
+  onChange={setSearch}
+/>
         </div>
 
         <div className="overflow-x-auto">
