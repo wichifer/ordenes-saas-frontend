@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { api } from "../../../api/api";
 import type { Empresa } from "../../../types/empresa";
 import EmpresaForm from "../components/EmpresaForm";
+import PageHeader from "@/components/common/PageHeader";
+import { Button } from "@/components/ui/button";
 
 export default function EmpresasPage() {
   const [empresas, setEmpresas] = useState<Empresa[]>([]);
@@ -29,30 +31,16 @@ export default function EmpresasPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-foreground">
-          Empresas
-        </h1>
-
-        <button
-          onClick={() =>
-            setMostrarFormulario(!mostrarFormulario)
-          }
-          className="
-            rounded-lg
-            bg-primary
-            px-4
-            py-2
-            text-primary-foreground
-            transition-colors
-            hover:opacity-90
-          "
-        >
-          {mostrarFormulario
-            ? "Cerrar"
-            : "Nueva Empresa"}
-        </button>
-      </div>
+      <PageHeader
+        title="Empresas"
+        actions={
+          <Button
+            onClick={() => setMostrarFormulario(!mostrarFormulario)}
+          >
+            {mostrarFormulario ? "Cerrar" : "Nueva Empresa"}
+          </Button>
+        }
+      />
 
       {/* Formulario */}
       {mostrarFormulario && (

@@ -1,6 +1,12 @@
 import { useState } from 'react';
 import { api } from '../../../api/api';
 
+
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+
 interface EmpresaFormProps {
   onEmpresaCreada: () => void;
 }
@@ -88,140 +94,134 @@ export default function EmpresaForm({
     }
   };
 
-  return (
+return (
+  <Card className="border-0 shadow-none bg-transparent">
+    <CardContent className="p-0">
+      <form onSubmit={guardarEmpresa} className="space-y-8">
 
-    <form
-      onSubmit={guardarEmpresa}
-      className="bg-white shadow rounded p-6 mb-6"
-    >
+        {/* Datos Empresa */}
+        <section className="space-y-4">
+          <h2 className="text-xl font-semibold text-foreground">
+            Datos de la Empresa
+          </h2>
 
-      <h2 className="text-xl font-bold mb-4">
-        Datos de la Empresa
-      </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-      <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="razonSocial">Razón Social</Label>
+              <Input
+                id="razonSocial"
+                value={razonSocial}
+                onChange={(e) => setRazonSocial(e.target.value)}
+                placeholder="Mi Empresa SRL"
+                required
+              />
+            </div>
 
-        <input
-          type="text"
-          placeholder="Razón Social"
-          className="border p-2 rounded"
-          value={razonSocial}
-          onChange={(e) =>
-            setRazonSocial(e.target.value)
-          }
-          required
-        />
+            <div className="space-y-2">
+              <Label htmlFor="cuit">CUIT</Label>
+              <Input
+                id="cuit"
+                value={cuit}
+                onChange={(e) => setCuit(e.target.value)}
+                placeholder="20-12345678-9"
+                required
+              />
+            </div>
 
-        <input
-          type="text"
-          placeholder="CUIT"
-          className="border p-2 rounded"
-          value={cuit}
-          onChange={(e) =>
-            setCuit(e.target.value)
-          }
-          required
-        />
+            <div className="space-y-2">
+              <Label htmlFor="emailEmpresa">Email</Label>
+              <Input
+                id="emailEmpresa"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="empresa@email.com"
+              />
+            </div>
 
-        <input
-          type="email"
-          placeholder="Email Empresa"
-          className="border p-2 rounded"
-          value={email}
-          onChange={(e) =>
-            setEmail(e.target.value)
-          }
-        />
+            <div className="space-y-2">
+              <Label htmlFor="telefono">Teléfono</Label>
+              <Input
+                id="telefono"
+                value={telefono}
+                onChange={(e) => setTelefono(e.target.value)}
+                placeholder="3624..."
+              />
+            </div>
 
-        <input
-          type="text"
-          placeholder="Teléfono"
-          className="border p-2 rounded"
-          value={telefono}
-          onChange={(e) =>
-            setTelefono(e.target.value)
-          }
-        />
+            <div className="space-y-2 md:col-span-2">
+              <Label htmlFor="direccion">Dirección</Label>
+              <Input
+                id="direccion"
+                value={direccion}
+                onChange={(e) => setDireccion(e.target.value)}
+                placeholder="Dirección"
+              />
+            </div>
 
-        <input
-          type="text"
-          placeholder="Dirección"
-          className="border p-2 rounded col-span-2"
-          value={direccion}
-          onChange={(e) =>
-            setDireccion(e.target.value)
-          }
-        />
+          </div>
+        </section>
 
-      </div>
+        {/* Administrador */}
+        <section className="space-y-4">
+          <h2 className="text-xl font-semibold text-foreground">
+            Administrador Inicial
+          </h2>
 
-      <h2 className="text-xl font-bold mt-8 mb-4">
-        Administrador Inicial
-      </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-      <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="nombre">Nombre</Label>
+              <Input
+                id="nombre"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                required
+              />
+            </div>
 
-        <input
-          type="text"
-          placeholder="Nombre"
-          className="border p-2 rounded"
-          value={nombre}
-          onChange={(e) =>
-            setNombre(e.target.value)
-          }
-          required
-        />
+            <div className="space-y-2">
+              <Label htmlFor="apellido">Apellido</Label>
+              <Input
+                id="apellido"
+                value={apellido}
+                onChange={(e) => setApellido(e.target.value)}
+                required
+              />
+            </div>
 
-        <input
-          type="text"
-          placeholder="Apellido"
-          className="border p-2 rounded"
-          value={apellido}
-          onChange={(e) =>
-            setApellido(e.target.value)
-          }
-          required
-        />
+            <div className="space-y-2">
+              <Label htmlFor="usuarioEmail">Email Administrador</Label>
+              <Input
+                id="usuarioEmail"
+                type="email"
+                value={usuarioEmail}
+                onChange={(e) => setUsuarioEmail(e.target.value)}
+                required
+              />
+            </div>
 
-        <input
-          type="email"
-          placeholder="Email Administrador"
-          className="border p-2 rounded"
-          value={usuarioEmail}
-          onChange={(e) =>
-            setUsuarioEmail(e.target.value)
-          }
-          required
-        />
+            <div className="space-y-2">
+              <Label htmlFor="password">Contraseña Inicial</Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
 
-        <input
-          type="password"
-          placeholder="Contraseña Inicial"
-          className="border p-2 rounded"
-          value={password}
-          onChange={(e) =>
-            setPassword(e.target.value)
-          }
-          required
-        />
+          </div>
+        </section>
 
-      </div>
+        <Button type="submit">
+          Guardar Empresa
+        </Button>
 
-      <button
-        type="submit"
-        className="
-          mt-6
-          bg-blue-600
-          hover:bg-blue-700
-          text-white
-          px-4
-          py-2
-          rounded-lg
-        "
-      >
-        Guardar Empresa
-      </button>
-
-    </form>
-  );
+      </form>
+    </CardContent>
+  </Card>
+);
 }
