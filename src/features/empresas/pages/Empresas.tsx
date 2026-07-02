@@ -1,6 +1,8 @@
+/* src/features/empresas/pages/Empresas.tsx */
 import { useEffect, useState } from "react";
 import { api } from "../../../api/api";
 import EmpresaForm from "../components/EmpresaForm";
+import PageHeader from "@/components/common/PageHeader";
 
 interface Empresa {
   id_empresa: string;
@@ -32,10 +34,10 @@ export default function Empresas() {
   return (
     <div className="space-y-6">
 
-      {/* Header */}
-      <h1 className="text-2xl font-semibold text-foreground">
-        Empresas
-      </h1>
+      <PageHeader
+        title="Empresas"
+        description="Administración de empresas del sistema."
+      />
 
       {/* Form */}
       <EmpresaForm onEmpresaCreada={cargarEmpresas} />
