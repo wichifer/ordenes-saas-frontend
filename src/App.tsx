@@ -27,7 +27,7 @@ import GlobalLoading from "./components/GlobalLoading";
 import { Toaster } from "sonner";
 
 
-import Layout from "./components/layout/AppLayout";
+//import Layout from "./components/layout/AppLayout";
 import Playground from "./pages/Playground";
 
 
