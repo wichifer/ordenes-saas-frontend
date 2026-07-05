@@ -17,10 +17,10 @@ import StockMovements from "./pages/StockMovements";
 import Payments from "./pages/Payments";
 import Reports from "./pages/Reports";
 import Audit from "./pages/Audit";
-import EmpresasPage from "./features/empresas/pages/EmpresasPage";
+import EmpresasPage from "./modules/empresas/pages/EmpresasPage";
 
 import AppLayout from "./components/layout/AppLayout";
-import ProtectedRoute from "./features/components/saas/ProtectedRoute";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
 import GlobalModal from "./store/components/GlobalModal";
 import GlobalLoading from "./components/GlobalLoading";

@@ -7,7 +7,7 @@ export const empresasService = {
     return res.data;
   },
 
-  remove: async (id: string): Promise<void> => {
-    await api.delete(`/empresas/${id}`);
-  },
+remove: async (id: number): Promise<void> => {
+  await api.delete(`/admin-saas/empresas/${id}`);
+},
 };

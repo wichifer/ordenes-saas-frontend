@@ -1,4 +1,4 @@
-/* src/modules/empresas/pages/EmpresasPage.tsx*/
+//  src/modules/empresas/pages/EmpresasPage.tsx
 import { useState } from "react";
 import PageHeader from "@/components/common/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -7,18 +7,31 @@ import EmptyState from "@/components/common/EmptyState";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
 
 import EmpresasTable from "../components/EmpresasTable";
-import EmpresaForm from "../../../features/empresas/components/EmpresaForm";
+import EmpresaForm from "../components/EmpresaForm";
 import { useEmpresas } from "../hooks/useEmpresas";
 
 import type { Empresa } from "@/types/empresa";
+import { useDeleteEmpresa } from "../hooks/useDeleteEmpresa";
 
 export default function EmpresasPage() {
-  const { empresas, loading, remove } = useEmpresas();
-
+const {
+  empresas,
+  isLoading,
+  error,
+  remove,
+} = useEmpresas();
+const deleteEmpresa = useDeleteEmpresa();
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [empresaAEliminar, setEmpresaAEliminar] = useState<Empresa | null>(null);
   const [search, setSearch] = useState("");
-
+if (error) {
+  return (
+    <EmptyState
+      title="Error al cargar empresas"
+      description="Ocurrió un error al obtener los datos."
+    />
+  );
+}
   const filtered = empresas.filter((e) => {
     const q = search.toLowerCase();
     return (
@@ -65,7 +78,7 @@ export default function EmpresasPage() {
           onDelete={setEmpresaAEliminar}
         />
 
-        {!loading && filtered.length === 0 && (
+        {!isLoading && filtered.length === 0 && (
           <EmptyState
             title="No hay empresas"
             description="Sin resultados."

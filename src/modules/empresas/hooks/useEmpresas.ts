@@ -5,16 +5,15 @@ import { empresasKeys } from "../queries/empresas.keys";
 export function useEmpresas() {
   const queryClient = useQueryClient();
 
-  // GET (server state)
+  // GET
   const empresasQuery = useQuery({
     queryKey: empresasKeys.all,
     queryFn: empresasService.getAll,
   });
 
-  // DELETE (mutation)
+  // DELETE
   const deleteMutation = useMutation({
     mutationFn: empresasService.remove,
-
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: empresasKeys.all,
@@ -24,10 +23,9 @@ export function useEmpresas() {
 
   return {
     empresas: empresasQuery.data ?? [],
-    loading: empresasQuery.isLoading,
+    isLoading: empresasQuery.isLoading,
     error: empresasQuery.error,
 
     remove: deleteMutation.mutateAsync,
-    removing: deleteMutation.isPending,
   };
 }
