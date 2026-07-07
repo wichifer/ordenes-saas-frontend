@@ -1,13 +1,22 @@
+import { Pencil, Trash2 } from "lucide-react";
+
 import DataTable from "@/components/common/DataTable";
 import StatusBadge from "@/components/common/StatusBadge";
+import { Button } from "@/components/ui/button";
+
 import type { Empresa } from "@/types/empresa";
 
 interface Props {
   data: Empresa[];
+  onEdit: (empresa: Empresa) => void;
   onDelete: (empresa: Empresa) => void;
 }
 
-export default function EmpresasTable({ data, onDelete }: Props) {
+export default function EmpresasTable({
+  data,
+  onEdit,
+  onDelete,
+}: Props) {
   const columns = [
     {
       key: "razon_social",
@@ -16,32 +25,51 @@ export default function EmpresasTable({ data, onDelete }: Props) {
     {
       key: "cuit",
       header: "CUIT",
-      render: (row: Empresa) => row.cuit ?? "-",
+      render: (row: Empresa) => row.cuit || "-",
     },
     {
       key: "email",
       header: "Email",
+      render: (row: Empresa) => row.email || "-",
     },
     {
       key: "estado",
       header: "Estado",
       render: (row: Empresa) => (
-        <StatusBadge status={row.estado ? "active" : "inactive"} />
+        <StatusBadge
+          status={row.activa ? "active" : "inactive"}
+        />
       ),
     },
     {
-      key: "actions",
-      header: "Acciones",
+      key: "acciones",
+      header: "",
       render: (row: Empresa) => (
-        <button
-          onClick={() => onDelete(row)}
-          className="text-red-600 hover:text-red-800 text-sm"
-        >
-          Eliminar
-        </button>
+        <div className="flex items-center justify-end gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => onEdit(row)}
+          >
+            <Pencil className="h-4 w-4" />
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => onDelete(row)}
+          >
+            <Trash2 className="h-4 w-4 text-red-600" />
+          </Button>
+        </div>
       ),
     },
   ];
 
-  return <DataTable data={data} columns={columns} />;
+  return (
+    <DataTable
+      data={data}
+      columns={columns}
+    />
+  );
 }

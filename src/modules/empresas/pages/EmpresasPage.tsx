@@ -1,71 +1,69 @@
-//  src/modules/empresas/pages/EmpresasPage.tsx
-import { useState } from "react";
+// src/modules/empresas/pages/EmpresasPage.tsx
+
+import { useMemo, useState } from "react";
+
 import PageHeader from "@/components/common/PageHeader";
-import { Button } from "@/components/ui/button";
 import SearchInput from "@/components/common/SearchInput";
 import EmptyState from "@/components/common/EmptyState";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
+import { Button } from "@/components/ui/button";
 
 import EmpresasTable from "../components/EmpresasTable";
-import EmpresaForm from "../components/EmpresaForm";
+import { EmpresaDrawer } from "@/modules/empresas/components/drawers/EmpresaDrawer";
+
 import { useEmpresas } from "../hooks/useEmpresas";
+import { useDeleteEmpresa } from "../hooks/useDeleteEmpresa";
+import { useEmpresaDrawer } from "../state/useEmpresaDrawer";
 
 import type { Empresa } from "@/types/empresa";
-import { useDeleteEmpresa } from "../hooks/useDeleteEmpresa";
 
 export default function EmpresasPage() {
-const {
-  empresas,
-  isLoading,
-  error,
-  remove,
-} = useEmpresas();
-const deleteEmpresa = useDeleteEmpresa();
-  const [mostrarFormulario, setMostrarFormulario] = useState(false);
-  const [empresaAEliminar, setEmpresaAEliminar] = useState<Empresa | null>(null);
+  const { data: empresas = [], isLoading, error } = useEmpresas();
+
+  const deleteEmpresa = useDeleteEmpresa();
+
+  const { openCreate, openEdit } = useEmpresaDrawer();
+
   const [search, setSearch] = useState("");
-if (error) {
-  return (
-    <EmptyState
-      title="Error al cargar empresas"
-      description="Ocurrió un error al obtener los datos."
-    />
-  );
-}
-  const filtered = empresas.filter((e) => {
+
+  const [empresaAEliminar, setEmpresaAEliminar] =
+    useState<Empresa | null>(null);
+
+  const filtered = useMemo(() => {
     const q = search.toLowerCase();
+
+    return empresas.filter((e) => {
+      return (
+        e.razon_social.toLowerCase().includes(q) ||
+        e.cuit.toLowerCase().includes(q) ||
+        e.email.toLowerCase().includes(q)
+      );
+    });
+  }, [empresas, search]);
+
+  if (error) {
     return (
-      (e.razon_social ?? "").toLowerCase().includes(q) ||
-      (e.cuit ?? "").toLowerCase().includes(q) ||
-      (e.email ?? "").toLowerCase().includes(q)
+      <EmptyState
+        title="Error al cargar empresas"
+        description="Ocurrió un error al obtener los datos."
+      />
     );
-  });
+  }
 
   return (
     <div className="space-y-6">
-
       <PageHeader
         title="Empresas"
         actions={
-          <Button onClick={() => setMostrarFormulario(v => !v)}>
-            {mostrarFormulario ? "Cerrar" : "Nueva Empresa"}
+          <Button onClick={openCreate}>
+            Nueva Empresa
           </Button>
         }
       />
 
-      {mostrarFormulario && (
-        <div className="rounded-xl border bg-card p-6 shadow-sm">
-          <EmpresaForm
-            onEmpresaCreada={() => {
-              setMostrarFormulario(false);
-            }}
-          />
-        </div>
-      )}
-
       <div className="rounded-xl border bg-card shadow-sm">
 
-        <div className="p-4 border-b">
+        <div className="border-b p-4">
           <SearchInput
             placeholder="Buscar empresa..."
             value={search}
@@ -75,16 +73,24 @@ if (error) {
 
         <EmpresasTable
           data={filtered}
+          onEdit={(empresa) =>
+            openEdit(empresa.id_empresa)
+          }
           onDelete={setEmpresaAEliminar}
         />
 
         {!isLoading && filtered.length === 0 && (
-          <EmptyState
-            title="No hay empresas"
-            description="Sin resultados."
-          />
+          <div className="p-6">
+            <EmptyState
+              title="No hay empresas"
+              description="No se encontraron resultados."
+            />
+          </div>
         )}
       </div>
+
+      {/* Drawer enterprise (nuevo sistema) */}
+      <EmpresaDrawer />
 
       <ConfirmDialog
         open={!!empresaAEliminar}
@@ -94,7 +100,10 @@ if (error) {
         onConfirm={async () => {
           if (!empresaAEliminar) return;
 
-          await remove(empresaAEliminar.id_empresa);
+          await deleteEmpresa.mutateAsync(
+            empresaAEliminar.id_empresa
+          );
+
           setEmpresaAEliminar(null);
         }}
       />
