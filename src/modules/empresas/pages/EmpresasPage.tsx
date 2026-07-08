@@ -16,6 +16,7 @@ import { useDeleteEmpresa } from "../hooks/useDeleteEmpresa";
 import { useEmpresaDrawer } from "../state/useEmpresaDrawer";
 
 import type { Empresa } from "@/types/empresa";
+import { toast } from "sonner";
 
 export default function EmpresasPage() {
   const { data: empresas = [], isLoading, error } = useEmpresas();
@@ -71,13 +72,13 @@ export default function EmpresasPage() {
           />
         </div>
 
-        <EmpresasTable
-          data={filtered}
-          onEdit={(empresa) =>
-            openEdit(empresa.id_empresa)
-          }
-          onDelete={setEmpresaAEliminar}
-        />
+<EmpresasTable
+  data={filtered}
+  onEdit={(empresa) =>
+    openEdit(empresa)
+  }
+  onDelete={setEmpresaAEliminar}
+/>
 
         {!isLoading && filtered.length === 0 && (
           <div className="p-6">

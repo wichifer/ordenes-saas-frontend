@@ -1,11 +1,11 @@
 export interface Empresa {
-  id_empresa: string;
+  id_empresa: number;
   razon_social: string;
-  nombre_comercial: string | null;
-  cuit: string | null;
+  cuit: string;
   email: string;
-  telefono: string | null;
-  estado: boolean;
-  created_at: string;
-  usuario_admin: string | null;
+  telefono?: string;
+  direccion?: string;
+  activa: boolean;
+  created_at?: string;
+  updated_at?: string;
 }

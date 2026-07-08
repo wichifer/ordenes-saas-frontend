@@ -2,7 +2,7 @@
 import { create } from "zustand";
 import type { Empresa } from "@/types/empresa";
 
-type Mode = "create" | "edit" | "view";
+type Mode = "create" | "edit" | "view" | "delete";
 
 interface EmpresaDrawerState {
   open: boolean;
@@ -12,6 +12,7 @@ interface EmpresaDrawerState {
   openCreate: () => void;
   openEdit: (empresa: Empresa) => void;
   openView: (empresa: Empresa) => void;
+  openDelete: (empresa: Empresa) => void;
   close: () => void;
 }
 
@@ -46,4 +47,10 @@ export const useEmpresaDrawer = create<EmpresaDrawerState>((set) => ({
       open: false,
       selected: null,
     }),
+    openDelete: (empresa) =>
+  set({
+    open: true,
+    mode: "delete",
+    selected: empresa,
+  }),
 }));

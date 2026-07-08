@@ -1,3 +1,4 @@
+// src/modules/empresas/components/EmpresasTable.tsx
 import { Pencil, Trash2 } from "lucide-react";
 
 import DataTable from "@/components/common/DataTable";

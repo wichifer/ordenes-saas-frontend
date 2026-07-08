@@ -2,30 +2,20 @@
 
 import { useEmpresaDrawer } from "../state/useEmpresaDrawer";
 
-import EmpresaDrawer from "./drawers/EmpresaDrawer";
-import { EmpresaModalCreate } from "./modals/EmpresaModalCreate";
+import { EmpresaDrawer } from "./drawers/EmpresaDrawer";
 import { EmpresaModalDelete } from "./modals/EmpresaModalDelete";
 
 export function EmpresaUIController() {
-  const { open, mode, close } = useEmpresaDrawer();
+  const { open, mode, selected, close } = useEmpresaDrawer();
 
-  if (!mode) return null;
+  if (!open) return null;
 
-  if (mode.type === "CREATE") {
-    return (
-      <EmpresaModalCreate
-        open={open}
-        onClose={close}
-      />
-    );
-  }
-
-  if (mode.type === "DELETE") {
+  if (mode === "delete" && selected) {
     return (
       <EmpresaModalDelete
-        id={mode.id}
         open={open}
         onClose={close}
+        empresa={selected}
       />
     );
   }
