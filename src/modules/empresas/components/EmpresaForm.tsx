@@ -15,14 +15,17 @@ import {
 
 
 import {
-  empresaSchema,
-  type EmpresaFormValues,
-} from "../schemas/empresa.schema";
+  empresaCreateSchema,
+  empresaUpdateSchema,
+  type EmpresaCreateFormValues,
+  type EmpresaUpdateFormValues,
+} from "../schemas";
 
 
 import { useCreateEmpresa } from "../hooks/useCreateEmpresa";
 import { useUpdateEmpresa } from "../hooks/useUpdateEmpresa";
 import { useEmpresaById } from "../hooks/useEmpresaById";
+
 
 
 interface Props {
@@ -49,8 +52,14 @@ export function EmpresaForm({
 
 
 
-  const methods = useForm<EmpresaFormValues>({
-    resolver: zodResolver(empresaSchema),
+const methods = useForm<
+  EmpresaCreateFormValues | EmpresaUpdateFormValues
+>({
+  resolver: zodResolver(
+    isEdit
+      ? empresaUpdateSchema
+      : empresaCreateSchema
+  ),
 
     defaultValues: {
 
@@ -104,9 +113,11 @@ useEffect(() => {
 
 
 
-  const onSubmit = async (
-    values: EmpresaFormValues
-  ) => {
+const onSubmit = async (
+  values:
+    | EmpresaCreateFormValues
+    | EmpresaUpdateFormValues
+) => {
 
     console.log(
       "SUBMIT EMPRESA",
@@ -118,20 +129,29 @@ useEffect(() => {
 
 
 
-    if (isEdit && id) {
+if (isEdit && id) {
 
-      await updateEmpresa.mutateAsync({
-        id,
-        data: values,
-      });
+  const updateData = {
+    razon_social: values.razon_social,
+    cuit: values.cuit,
+    email: values.email,
+    telefono: values.telefono,
+    direccion: values.direccion,
+  };
 
-    } else {
 
-      await createEmpresa.mutateAsync(
-        values
-      );
+  await updateEmpresa.mutateAsync({
+    id,
+    data: updateData,
+  });
 
-    }
+} else {
+
+  await createEmpresa.mutateAsync(
+    values as EmpresaCreateFormValues
+  );
+
+}
 
   };
 
@@ -219,7 +239,7 @@ useEffect(() => {
         </FormSection>
 
 
-
+{!isEdit && (
         <FormSection
           title="Administrador"
           description="Se creará automáticamente el usuario administrador de la empresa."
@@ -269,7 +289,7 @@ useEffect(() => {
 
 
         </FormSection>
-
+)}
 
 
         {!readonly && (

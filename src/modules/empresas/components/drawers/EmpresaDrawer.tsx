@@ -7,16 +7,13 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 
-
 import { EmpresaForm } from "../EmpresaForm";
 
 import {
   useEmpresaDrawer,
 } from "../../state/useEmpresaDrawer";
 
-
 export function EmpresaDrawer() {
-
   const {
     open,
     mode,
@@ -24,13 +21,9 @@ export function EmpresaDrawer() {
     close,
   } = useEmpresaDrawer();
 
-
-  const isReadOnly =
-    mode === "view";
-
+  const isReadOnly = mode === "view";
 
   return (
-
     <Drawer
       open={open}
       onOpenChange={(value) => {
@@ -39,31 +32,21 @@ export function EmpresaDrawer() {
         }
       }}
     >
-
       <DrawerContent
         className="
           max-h-[90vh]
           p-6
         "
       >
-
         <DrawerHeader>
-
           <DrawerTitle>
+            {mode === "create" && "Nueva Empresa"}
 
-            {mode === "create" &&
-              "Nueva Empresa"}
+            {mode === "edit" && "Editar Empresa"}
 
-            {mode === "edit" &&
-              "Editar Empresa"}
-
-            {mode === "view" &&
-              "Detalle de Empresa"}
-
+            {mode === "view" && "Detalle de Empresa"}
           </DrawerTitle>
-
         </DrawerHeader>
-
 
         <div
           className="
@@ -72,22 +55,12 @@ export function EmpresaDrawer() {
             pb-8
           "
         >
-
           <EmpresaForm
-            id={
-              selected?.id_empresa
-            }
-            readonly={
-              isReadOnly
-            }
+            id={selected?.id_empresa}
+            readonly={isReadOnly}
           />
-
         </div>
-
-
       </DrawerContent>
-
     </Drawer>
-
   );
 }

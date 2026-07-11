@@ -1,2 +1,2 @@
-export * from "./createEmpresa.schema";
-export * from "./updateEmpresa.schema";
+export * from "./empresaCreate.schema";
+export * from "./empresaUpdate.schema";
