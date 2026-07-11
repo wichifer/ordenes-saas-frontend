@@ -1,22 +1,24 @@
-// src/modules/empresas/components/EmpresaForm.tsx
-
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import {
+  useForm,
+  FormProvider,
+} from "react-hook-form";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   Form,
   FormSection,
   FormRow,
-  TextField,
+  RHFTextField,
 } from "@/components/form";
 
-import { Button } from "@/components/ui/button";
 
 import {
   empresaSchema,
   type EmpresaFormValues,
 } from "../schemas/empresa.schema";
+
 
 import { useCreateEmpresa } from "../hooks/useCreateEmpresa";
 import { useUpdateEmpresa } from "../hooks/useUpdateEmpresa";
@@ -38,49 +40,67 @@ export function EmpresaForm({
 
 
   const createEmpresa = useCreateEmpresa();
-
   const updateEmpresa = useUpdateEmpresa();
 
 
-  const { data: empresa } = useEmpresaById(id);
-
-
   const {
-    register,
-    handleSubmit,
-    reset,
-    formState: {
-      errors,
-    },
-  } = useForm<EmpresaFormValues>({
+    data: empresa,
+  } = useEmpresaById(id);
+
+
+
+  const methods = useForm<EmpresaFormValues>({
     resolver: zodResolver(empresaSchema),
 
     defaultValues: {
+
       razon_social: "",
       cuit: "",
       email: "",
+      telefono: "",
+      direccion: "",
+
+      nombre: "",
+      apellido: "",
+      usuario_email: "",
+      password: "",
     },
   });
 
 
 
-  useEffect(() => {
-
-    if (empresa && isEdit) {
-
-      reset({
-        razon_social: empresa.razon_social,
-        cuit: empresa.cuit,
-        email: empresa.email,
-      });
-
-    }
-
-  }, [
-    empresa,
-    isEdit,
+  const {
     reset,
-  ]);
+    handleSubmit,
+  } = methods;
+
+
+
+useEffect(() => {
+  console.log("EDIT ID:", id);
+  console.log("EMPRESA CARGADA:", empresa);
+
+  if (empresa && isEdit) {
+    reset({
+      razon_social: empresa.razon_social,
+      cuit: empresa.cuit,
+      email: empresa.email ?? "",
+      telefono: empresa.telefono ?? "",
+      direccion: empresa.direccion ?? "",
+
+      nombre: "",
+      apellido: "",
+      usuario_email: "",
+      password: "",
+    });
+  }
+
+}, [
+  empresa,
+  isEdit,
+  reset,
+  id,
+]);
 
 
 
@@ -88,7 +108,14 @@ export function EmpresaForm({
     values: EmpresaFormValues
   ) => {
 
+    console.log(
+      "SUBMIT EMPRESA",
+      values
+    );
+
+
     if (readonly) return;
+
 
 
     if (isEdit && id) {
@@ -100,7 +127,9 @@ export function EmpresaForm({
 
     } else {
 
-      await createEmpresa.mutateAsync(values);
+      await createEmpresa.mutateAsync(
+        values
+      );
 
     }
 
@@ -110,91 +139,169 @@ export function EmpresaForm({
 
   return (
 
-    <Form
-      onSubmit={handleSubmit(onSubmit)}
-    >
+    <FormProvider {...methods}>
 
-      <FormSection
-        title="Datos de la Empresa"
-        description="Información principal de la empresa."
+      <Form
+        onSubmit={
+          handleSubmit(
+            onSubmit,
+            (errors) => {
+              console.log(
+                "ERRORES RHF",
+                errors
+              );
+            }
+          )
+        }
       >
 
-        <FormRow>
 
-          <TextField
-            label="Razón Social"
-            placeholder="Razón Social"
-            disabled={readonly}
-            error={
-              errors.razon_social?.message
-            }
-            {...register(
-              "razon_social"
-            )}
-          />
-
-
-          <TextField
-            label="CUIT"
-            placeholder="CUIT"
-            disabled={readonly}
-            error={
-              errors.cuit?.message
-            }
-            {...register(
-              "cuit"
-            )}
-          />
-
-
-        </FormRow>
-
-
-        <FormRow columns={1}>
-
-          <TextField
-            label="Email"
-            type="email"
-            placeholder="Email"
-            disabled={readonly}
-            error={
-              errors.email?.message
-            }
-            {...register(
-              "email"
-            )}
-          />
-
-
-        </FormRow>
-
-
-      </FormSection>
-
-
-
-      {!readonly && (
-
-        <Button
-          type="submit"
-          disabled={
-            createEmpresa.isPending ||
-            updateEmpresa.isPending
-          }
+        <FormSection
+          title="Datos de la Empresa"
+          description="Información principal de la empresa."
         >
 
-          {
-            isEdit
-              ? "Actualizar"
-              : "Crear"
-          }
+          <FormRow>
 
-        </Button>
+            <RHFTextField
+              name="razon_social"
+              label="Razón Social"
+              placeholder="Razón Social"
+              disabled={readonly}
+            />
 
-      )}
+
+            <RHFTextField
+              name="cuit"
+              label="CUIT"
+              placeholder="20301234567"
+              disabled={readonly}
+            />
+
+          </FormRow>
 
 
-    </Form>
+
+          <FormRow>
+
+            <RHFTextField
+              name="email"
+              label="Email"
+              type="email"
+              placeholder="empresa@email.com"
+              disabled={readonly}
+            />
+
+
+            <RHFTextField
+              name="telefono"
+              label="Teléfono"
+              placeholder="3624..."
+              disabled={readonly}
+            />
+
+          </FormRow>
+
+
+
+          <FormRow columns={1}>
+
+            <RHFTextField
+              name="direccion"
+              label="Dirección"
+              placeholder="Dirección"
+              disabled={readonly}
+            />
+
+          </FormRow>
+
+
+        </FormSection>
+
+
+
+        <FormSection
+          title="Administrador"
+          description="Se creará automáticamente el usuario administrador de la empresa."
+        >
+
+          <FormRow>
+
+            <RHFTextField
+              name="nombre"
+              label="Nombre"
+              placeholder="Nombre"
+              disabled={readonly}
+            />
+
+
+            <RHFTextField
+              name="apellido"
+              label="Apellido"
+              placeholder="Apellido"
+              disabled={readonly}
+            />
+
+          </FormRow>
+
+
+
+          <FormRow>
+
+            <RHFTextField
+              name="usuario_email"
+              label="Email de acceso"
+              type="email"
+              placeholder="admin@empresa.com"
+              disabled={readonly}
+            />
+
+
+            <RHFTextField
+              name="password"
+              label="Contraseña"
+              type="password"
+              placeholder="********"
+              disabled={readonly}
+            />
+
+          </FormRow>
+
+
+        </FormSection>
+
+
+
+        {!readonly && (
+
+          <div className="flex justify-end pt-6">
+
+            <button
+              type="submit"
+              disabled={
+                createEmpresa.isPending ||
+                updateEmpresa.isPending
+              }
+              className="rounded-md bg-primary px-4 py-2 text-primary-foreground"
+            >
+              {
+                isEdit
+                  ? "Actualizar Empresa"
+                  : "Crear Empresa"
+              }
+
+            </button>
+
+          </div>
+
+        )}
+
+
+
+      </Form>
+
+    </FormProvider>
 
   );
+
 }

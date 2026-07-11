@@ -1,6 +1,14 @@
+// src/components/form/Field.tsx
+
 import type { ReactNode } from "react";
+
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+
+import {
+  ErrorMessage,
+} from "./ErrorMessage";
+
 
 interface FieldProps {
   label?: string;
@@ -11,6 +19,7 @@ interface FieldProps {
   className?: string;
 }
 
+
 export function Field({
   label,
   required,
@@ -19,28 +28,37 @@ export function Field({
   children,
   className,
 }: FieldProps) {
+
   return (
     <div className={cn("space-y-2", className)}>
+
       {label && (
         <Label className="text-sm font-medium">
           {label}
+
           {required && (
-            <span className="ml-1 text-destructive">*</span>
+            <span className="ml-1 text-destructive">
+              *
+            </span>
           )}
+
         </Label>
       )}
 
+
       {children}
 
+
       {error ? (
-        <p className="text-xs text-destructive">
+        <ErrorMessage>
           {error}
-        </p>
+        </ErrorMessage>
       ) : helperText ? (
         <p className="text-xs text-muted-foreground">
           {helperText}
         </p>
       ) : null}
+
     </div>
   );
 }

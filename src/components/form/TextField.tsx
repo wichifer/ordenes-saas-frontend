@@ -6,12 +6,16 @@ import {
 
 import { Input } from "@/components/ui/input";
 
+import { Field } from "./Field";
+
 
 interface Props
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+ extends React.InputHTMLAttributes<HTMLInputElement> {
 
   label?: string;
   error?: string;
+  required?: boolean;
+  helperText?: string;
 }
 
 
@@ -23,36 +27,26 @@ export const TextField = forwardRef<
     {
       label,
       error,
+      required,
+      helperText,
       ...props
     },
     ref
   ) => {
 
     return (
-      <div className="space-y-2">
-
-        {label && (
-          <label className="text-sm font-medium">
-            {label}
-          </label>
-        )}
-
-
+      <Field
+        label={label}
+        error={error}
+        required={required}
+        helperText={helperText}
+      >
         <Input
           ref={ref}
           {...props}
         />
-
-
-        {error && (
-          <p className="text-xs text-destructive">
-            {error}
-          </p>
-        )}
-
-      </div>
+      </Field>
     );
-
   }
 );
 
