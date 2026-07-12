@@ -22,7 +22,10 @@ import EmpresasPage from "./modules/empresas/pages/EmpresasPage";
 import AppLayout from "./components/layout/AppLayout";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 
-import GlobalModal from "./store/components/GlobalModal";
+
+import GlobalModal from "./components/modals/GlobalModal";
+import GlobalConfirmDialog 
+from "./components/modals/GlobalConfirmDialog";
 import GlobalLoading from "./components/GlobalLoading";
 import { Toaster } from "sonner";
 import DashboardPage from "@/modules/dashboard/pages/DashboardPage";
@@ -78,6 +81,7 @@ function App() {
       <Toaster richColors position="top-right" />
       <GlobalLoading />
       <GlobalModal />
+      <GlobalConfirmDialog />
     </>
   );
 }
