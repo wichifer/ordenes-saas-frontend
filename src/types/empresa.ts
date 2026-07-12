@@ -5,7 +5,9 @@ export interface Empresa {
   email: string;
   telefono?: string;
   direccion?: string;
-  activa: boolean;
+
+  estado: boolean;
+
   created_at?: string;
   updated_at?: string;
 }

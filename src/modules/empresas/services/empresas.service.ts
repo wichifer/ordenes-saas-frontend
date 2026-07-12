@@ -41,4 +41,17 @@ create: async (data: EmpresaFormValues): Promise<Empresa> => {
     throw err;
   }
 },
+async updateStatus(
+  id: number,
+  estado: boolean,
+) {
+  const { data } = await api.patch(
+    `/admin-saas/empresas/${id}/estado`,
+    {
+      estado,
+    },
+  );
+
+  return data;
+}
 };

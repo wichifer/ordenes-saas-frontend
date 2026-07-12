@@ -1,4 +1,13 @@
 export const empresasKeys = {
   all: ["empresas"] as const,
-  detail: (id: number) => ["empresas", "detail", id] as const,
+
+  lists: () => [...empresasKeys.all, "list"] as const,
+
+  list: (filters?: unknown) =>
+    [...empresasKeys.lists(), filters] as const,
+
+  details: () => [...empresasKeys.all, "detail"] as const,
+
+  detail: (id: number) =>
+    [...empresasKeys.details(), id] as const,
 };

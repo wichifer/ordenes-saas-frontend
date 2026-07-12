@@ -6,6 +6,7 @@ import StatusBadge from "@/components/common/StatusBadge";
 import { Button } from "@/components/ui/button";
 
 import type { Empresa } from "@/types/empresa";
+import { EmpresaStatusSwitch } from "./EmpresaStatusSwitch";
 
 interface Props {
   data: Empresa[];
@@ -33,15 +34,19 @@ export default function EmpresasTable({
       header: "Email",
       render: (row: Empresa) => row.email || "-",
     },
-    {
-      key: "estado",
-      header: "Estado",
-      render: (row: Empresa) => (
-        <StatusBadge
-          status={row.activa ? "active" : "inactive"}
-        />
-      ),
-    },
+{
+  key: "estado",
+  header: "Estado",
+  render: (row: Empresa) => (
+    <div className="flex items-center gap-3">
+      <StatusBadge
+        status={row.estado ? "active" : "inactive"}
+      />
+
+      <EmpresaStatusSwitch empresa={row} />
+    </div>
+  ),
+},
     {
       key: "acciones",
       header: "",

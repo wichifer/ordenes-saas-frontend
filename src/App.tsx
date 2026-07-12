@@ -25,7 +25,7 @@ import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import GlobalModal from "./store/components/GlobalModal";
 import GlobalLoading from "./components/GlobalLoading";
 import { Toaster } from "sonner";
-
+import DashboardPage from "@/modules/dashboard/pages/DashboardPage";
 
 //import Layout from "./components/layout/AppLayout";
 import Playground from "./pages/Playground";
@@ -66,8 +66,9 @@ function App() {
             <Route path="/payments" element={<Payments />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/audit" element={<Audit />} />
-
+            <Route path="/saas" element={<DashboardPage />} />
             <Route path="/saas/empresas" element={<EmpresasPage />} />
+            <Route path="/saas/dashboard" element={<DashboardPage />} />
            <Route path="/playground" element={<Playground />} />
           </Route>
         </Route>
