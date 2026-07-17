@@ -1,12 +1,7 @@
-export function EmpresaModalDelete({ open, onClose, id }) {
-  return (
-    <div>
-      Confirmar eliminación empresa {id}
-    </div>
-  );
-}// src/modules/empresas/components/modals/EmpresaModalDelete.tsx
-
+// src/modules/empresas/components/modals/EmpresaModalDelete.tsx
 import type { Empresa } from "@/types/empresa";
+
+
 
 interface Props {
   open: boolean;

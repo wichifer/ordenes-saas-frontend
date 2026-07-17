@@ -12,3 +12,4 @@ export * from "./SelectField";
 export * from "./SwitchField";
 export * from "./CheckboxField";
 export * from "./RHFTextField"
+export * from "./RHFSwitchField";

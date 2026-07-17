@@ -1,4 +1,4 @@
-
+// src/pages/Payments.tsx
 import { useEffect, useState } from 'react';
 import { api } from '../api/api';
 import { useSearchParams,} from 'react-router-dom';

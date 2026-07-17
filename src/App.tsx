@@ -33,7 +33,7 @@ import DashboardPage from "@/modules/dashboard/pages/DashboardPage";
 //import Layout from "./components/layout/AppLayout";
 import Playground from "./pages/Playground";
 
-
+import ClientesPage from "@/modules/clientes/pages/ClientesPage";
 
 
 function App() {
@@ -71,6 +71,7 @@ function App() {
             <Route path="/audit" element={<Audit />} />
             <Route path="/saas" element={<DashboardPage />} />
             <Route path="/saas/empresas" element={<EmpresasPage />} />
+            <Route path="/saas/clientes" element={<ClientesPage />} />
             <Route path="/saas/dashboard" element={<DashboardPage />} />
            <Route path="/playground" element={<Playground />} />
           </Route>
