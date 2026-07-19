@@ -14,6 +14,12 @@ import type {
   Cliente,
 } from "../types/cliente";
 
+import ClienteTypeBadge from "./ClienteTypeBadge";
+
+import {
+  getClienteDisplayName,
+  getClienteContacto,
+} from "../utils/cliente.utils";
 
 interface Props {
 
@@ -43,20 +49,13 @@ export default function ClientesTable({
   const columns = [
 
     {
-      key: "cliente",
+        key: "cliente",
 
-      header: "Cliente",
+        header: "Cliente",
 
-      render: (row: Cliente) =>
-
-        row.razon_social ||
-
-        [row.nombre, row.apellido]
-          .filter(Boolean)
-          .join(" ") ||
-
-        "-",
-
+        render: (row: Cliente) => (
+            getClienteDisplayName(row)
+        ),
     },
 
 
@@ -77,42 +76,31 @@ export default function ClientesTable({
 
 
     {
-      key: "telefono",
+  key: "contacto",
 
-      header: "Teléfono",
+  header: "Contacto",
 
-      render: (row: Cliente) =>
-
-        row.telefono || "-",
-
-    },
-
-
-    {
-      key: "email",
-
-      header: "Email",
-
-      render: (row: Cliente) =>
-
-        row.email || "-",
-
-    },
+  render: (row: Cliente) => (
+    getClienteContacto(row)
+  ),
+},
 
 
     {
-      key: "consumidor",
+  key: "tipo",
 
-      header: "Consumidor Final",
+  header: "Tipo",
 
-      render: (row: Cliente) =>
+  render: (row: Cliente) => (
 
+    <ClienteTypeBadge
+      esConsumidorFinal={
         row.es_consumidor_final
-          ? "Sí"
-          : "No",
+      }
+    />
 
-    },
-
+  ),
+},
 
     {
       key: "estado",
@@ -141,16 +129,18 @@ export default function ClientesTable({
 
       render: (row: Cliente) => (
 
-        <div className="flex items-center justify-end gap-2">
+      <div className="flex items-center justify-end gap-1 whitespace-nowrap">
 
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => onView(row)}
-          >
-            <Eye className="h-4 w-4" />
-          </Button>
-
+<Button
+  variant="ghost"
+  size="icon"
+  onMouseDown={(e) => {
+    e.currentTarget.blur();
+  }}
+  onClick={() => onView(row)}
+>
+  <Eye className="h-4 w-4" />
+</Button>
           <Button
             variant="ghost"
             size="icon"

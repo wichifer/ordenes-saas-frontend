@@ -130,11 +130,12 @@ const saveApproveAndPay = async () => {
 
     const orderId =
       response.data.id_orden_compra;
-
+console.log("PATCH APROBAR ORDEN", orderId);
     // Aprobar automáticamente
     await api.patch(
       `/orders/${orderId}`,
       {
+        
         estado: 'APROBADA',
       },
     );
@@ -394,27 +395,26 @@ const saveApproveAndPay = async () => {
           </td>
 
           <td>
-            <td>
-  <input
-    type="number"
-    step="0.01"
-    min="0.01"
-    value={item.cantidad}
-    onChange={(e) =>
-      setItems(
-        items.map((i) =>
-          i.id_articulo === item.id_articulo
-            ? {
-                ...i,
-                cantidad: Number(e.target.value),
+            <input
+              type="number"
+              step="0.01"
+              min="0.01"
+              value={item.cantidad}
+              onChange={(e) =>
+                setItems(
+                  items.map((i) =>
+                    i.id_articulo === item.id_articulo
+                      ? {
+                          ...i,
+                          cantidad: Number(e.target.value),
+                        }
+                      : i,
+                  ),
+                )
               }
-            : i,
-        ),
-      )
-    }
-    style={{ width: '80px' }}
-  />
-</td>
+              style={{ width: '80px' }}
+            />
+            
           </td>
 
           <td>

@@ -11,33 +11,30 @@ import {
   zodResolver,
 } from "@hookform/resolvers/zod";
 
-
 import {
   Form,
 } from "@/components/form";
-
 
 import {
   clienteSchema,
   type ClienteFormValues,
 } from "../schemas";
 
-
 import type {
   Cliente,
 } from "../types/cliente";
-import type { DrawerMode } from "../state/useClienteDrawer";
 
+import type {
+  DrawerMode,
+} from "../state/useClienteDrawer";
 
 import {
   useCreateCliente,
 } from "../hooks/useCreateCliente";
 
-
 import {
   useUpdateCliente,
 } from "../hooks/useUpdateCliente";
-
 
 import {
   ClienteFormFields,
@@ -66,12 +63,21 @@ export function ClienteForm({
 }: Props) {
 
 
-  const readonly =
+  const isCreate =
+    mode === "create";
+
+
+  const isEdit =
+    mode === "edit";
+
+
+  const isView =
     mode === "view";
 
 
-const isEdit =
-  mode === "edit";
+  const readonly =
+    isView;
+
 
 
   const createCliente =
@@ -83,33 +89,37 @@ const isEdit =
 
 
 
+  const defaultValues: ClienteFormValues = {
+
+    nombre: "",
+
+    apellido: "",
+
+    razon_social: "",
+
+    documento: "",
+
+    cuit: "",
+
+    telefono: "",
+
+    email: "",
+
+    direccion: "",
+
+    es_consumidor_final: false,
+
+  };
+
+
+
   const methods =
     useForm<ClienteFormValues>({
 
       resolver:
         zodResolver(clienteSchema),
 
-      defaultValues: {
-
-        nombre: "",
-
-        apellido: "",
-
-        razon_social: "",
-
-        documento: "",
-
-        cuit: "",
-
-        telefono: "",
-
-        email: "",
-
-        direccion: "",
-
-        es_consumidor_final: false,
-
-      },
+      defaultValues,
 
     });
 
@@ -124,7 +134,7 @@ const isEdit =
 
   useEffect(() => {
 
-    if (cliente && isEdit) {
+    if (cliente && (isEdit || isView)) {
 
       reset({
 
@@ -162,8 +172,26 @@ const isEdit =
   }, [
     cliente,
     isEdit,
+    isView,
     reset,
   ]);
+
+
+
+
+  useEffect(() => {
+
+    if (isCreate) {
+
+      reset(defaultValues);
+
+    }
+
+  }, [
+    isCreate,
+    reset,
+  ]);
+
 
 
 
@@ -193,7 +221,6 @@ const isEdit =
         });
 
 
-
       } else {
 
 
@@ -212,40 +239,81 @@ const isEdit =
 
 
 
+
   return (
 
     <FormProvider {...methods}>
 
+
       <Form
+
         onSubmit={
           handleSubmit(
             onSubmit,
             (errors) => {
+
               console.log(
                 "ERRORES CLIENTE",
                 errors,
               );
+
             },
           )
         }
+
       >
 
 
         <ClienteFormFields
+
           readonly={readonly}
+
         />
 
 
 
-        {!readonly && (
 
-          <div
-            className="
-              flex
-              justify-end
-              pt-6
-            "
-          >
+        <div
+          className="
+            flex
+            justify-end
+            pt-6
+          "
+        >
+
+
+          {readonly ? (
+
+            <button
+
+              type="button"
+
+              onClick={() => {
+
+                console.log(
+                  "CERRANDO DESDE FORM"
+                );
+
+                onClose?.();
+
+              }}
+
+              className="
+                rounded-md
+                border
+                px-4
+                py-2
+              "
+
+            >
+
+              Cerrar
+
+            </button>
+
+
+          ) : (
+
 
             <button
 
@@ -263,6 +331,7 @@ const isEdit =
                 py-2
                 text-primary-foreground
               "
+
             >
 
               {
@@ -275,13 +344,14 @@ const isEdit =
             </button>
 
 
-          </div>
+          )}
 
-        )}
 
+        </div>
 
 
       </Form>
+
 
     </FormProvider>
 

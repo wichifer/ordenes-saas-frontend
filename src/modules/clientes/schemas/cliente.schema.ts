@@ -1,3 +1,4 @@
+//src/modules/clientes/schemas/cliente.schema.ts
 import { z } from "zod";
 
 export const clienteSchema = z
@@ -38,7 +39,7 @@ export const clienteSchema = z
 
     es_consumidor_final: z
       .boolean()
-      .default(false),
+
 
   })
   .refine(

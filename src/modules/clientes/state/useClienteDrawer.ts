@@ -58,10 +58,11 @@ export const useClienteDrawer =
         selected: cliente,
       }),
 
-    close: () =>
-      set({
-        open: false,
-        selected: null,
-      }),
+        close: () =>
+        set({
+            open: false,
+            mode: "create",
+            selected: null,
+        }),
 
   }));

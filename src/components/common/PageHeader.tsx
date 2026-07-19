@@ -1,4 +1,5 @@
-import { ReactNode } from "react";
+//C:\dev\ordenes-saas-frontend\src\components\common\PageHeader.tsx
+import type{ ReactNode } from "react";
 
 interface PageHeaderProps {
   title: string;

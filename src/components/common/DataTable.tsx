@@ -36,8 +36,9 @@ export default function DataTable<T>({
     return <>{emptyState}</>;
   }
 
-  return (
-    <Table>
+return (
+  <div className="w-full overflow-x-auto">
+   <Table className="min-w-[900px]">
       <TableHeader>
         <TableRow>
           {columns.map((col) => (
@@ -64,5 +65,6 @@ export default function DataTable<T>({
         ))}
       </TableBody>
     </Table>
-  );
+  </div>
+);
 }

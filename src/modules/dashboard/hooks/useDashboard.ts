@@ -6,7 +6,7 @@ import type { Dashboard } from "../types/dashboard";
 
 export function useDashboard() {
   return useQuery<Dashboard>({
-    queryKey: dashboardKeys.all,
+    queryKey: dashboardKeys.stats(),
     queryFn: dashboardService.getDashboard,
   });
 }

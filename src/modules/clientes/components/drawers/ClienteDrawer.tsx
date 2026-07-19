@@ -46,35 +46,46 @@ export function ClienteDrawer() {
 
     >
 
-        <DrawerContent
-            className="
-                max-w-3xl
-                w-full
-                max-h-[90vh]
-                overflow-y-auto
-            "
-        >
+    <DrawerContent
+    className="
+        max-w-3xl
+        w-full
+        max-h-[90vh]
+    "
+    >
 
         <DrawerHeader>
 
-          <DrawerTitle>
+            <DrawerTitle>
             {title}
-          </DrawerTitle>
+            </DrawerTitle>
 
         </DrawerHeader>
 
 
-        <ClienteForm
+        <div
+            className="
+            overflow-y-auto
+            max-h-[75vh]
+            px-4
+            pb-4
+            "
+        >
 
-          mode={mode}
+                <ClienteForm
 
-          cliente={selected}
+                mode={mode}
 
-          onClose={close}
+                cliente={selected}
 
-        />
+                onClose={close}
 
-      </DrawerContent>
+                />
+
+            </div>
+
+
+    </DrawerContent>
 
     </Drawer>
 
