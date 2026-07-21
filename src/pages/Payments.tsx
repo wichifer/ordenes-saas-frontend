@@ -1,481 +1,452 @@
 // src/pages/Payments.tsx
-import { useEffect, useState } from 'react';
-import { api } from '../api/api';
-import { useSearchParams,} from 'react-router-dom';
 
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { toast } from "sonner";
+
+import { api } from "../api/api";
+
+import PageHeader from "@/components/common/PageHeader";
+
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export default function Payments() {
-const [searchParams] =
-  useSearchParams();
-  const [payments, setPayments] =
-    useState<any[]>([]);
 
-  const [orders, setOrders] =
-    useState<any[]>([]);
+  const [searchParams] = useSearchParams();
 
-  const [idOrden, setIdOrden] =
-    useState('');
+  const [payments, setPayments] = useState<any[]>([]);
 
-  const [monto, setMonto] =
-    useState('');
+  const [orders, setOrders] = useState<any[]>([]);
+
+  const [idOrden, setIdOrden] = useState("");
+
+  const [monto, setMonto] = useState("");
 
   const [metodoPago, setMetodoPago] =
-    useState('EFECTIVO');
+    useState("EFECTIVO");
 
   const [observaciones, setObservaciones] =
-    useState('');
+    useState("");
 
-  const ordenSeleccionada =
-    orders.find(
-      (o) =>
-        o.id_orden_compra === idOrden,
-    );
-    useEffect(() => {
+  const ordenSeleccionada = orders.find(
+    (o) => String(o.id_orden_compra) === idOrden
+  );
 
-  if (ordenSeleccionada) {
+  useEffect(() => {
 
-    setMonto(
-      String(
-        ordenSeleccionada.saldo_pendiente,
-      ),
-    );
+    if (ordenSeleccionada) {
 
-  }
+      setMonto(
+        String(ordenSeleccionada.saldo_pendiente)
+      );
 
-}, [ordenSeleccionada]);
-// const ordenesAprobadas =
-//   orders.filter(
-//     (o) =>
-//       o.estado ===
-//       'APROBADA',
-//   );
- useEffect(() => {
+    }
 
-  loadPayments();
-  loadOrders();
+  }, [ordenSeleccionada]);
 
-}, []); 
-useEffect(() => {
-  const orderId = searchParams.get('order');
+  useEffect(() => {
 
-  if (
-    orderId &&
-    orders.length > 0 &&
-    idOrden === ''
-  ) {
-    setIdOrden(orderId);
-  }
-}, [orders, searchParams, idOrden]);
+    loadPayments();
+    loadOrders();
 
-  const loadPayments =
-    async () => {
+  }, []);
 
-      try {
+  useEffect(() => {
 
-        const response =
-          await api.get(
-            '/payments',
-          );
+    const orderId = searchParams.get("order");
 
-        setPayments(
-          response.data,
-        );
+    if (
+      orderId &&
+      orders.length > 0 &&
+      idOrden === ""
+    ) {
 
-      } catch (error) {
+      setIdOrden(orderId);
 
-        console.error(error);
+    }
 
-      }
+  }, [orders, searchParams, idOrden]);
 
-    };
+  const loadPayments = async () => {
 
-  const loadOrders =
-    async () => {
+    try {
 
-      try {
+      const response = await api.get("/payments");
 
-        const response =
-          await api.get(
-           '/payments/pending-orders',
-          );
+      setPayments(response.data);
 
-        setOrders(
-          response.data,
-        );
+    } catch (error) {
 
-      } catch (error) {
+      console.error(error);
 
-        console.error(error);
+      toast.error("Error al cargar los pagos");
 
-      }
+    }
 
-    };
+  };
 
-  const createPayment =
-    async () => {
+  const loadOrders = async () => {
 
-      try {
+    try {
 
-        if (!idOrden) {
+      const response = await api.get(
+        "/payments/pending-orders"
+      );
 
-          alert(
-            'Seleccione una orden',
-          );
+      setOrders(response.data);
 
-          return;
+    } catch (error) {
 
-        }
+      console.error(error);
 
-        if (
-          Number(monto) <= 0
-        ) {
+      toast.error("Error al cargar las órdenes");
 
-          alert(
-            'Monto inválido',
-          );
+    }
 
-          return;
+  };
 
-        }
+  const createPayment = async () => {
 
-        await api.post(
-          '/payments',
-          {
+    try {
 
-            id_orden_compra:
-              idOrden,
+      if (!idOrden) {
 
-            monto,
+        toast.error("Seleccione una orden");
 
-            metodo_pago:
-              metodoPago,
-
-            observaciones,
-
-          },
-        );
-
-        alert(
-          'Pago registrado',
-        );
-
-        setIdOrden('');
-        setMonto('');
-        setMetodoPago(
-          'EFECTIVO',
-        );
-        setObservaciones('');
-
-        loadPayments();
-        loadOrders();
-      } catch (error: any) {
-
-        console.error(error);
-
-        alert(
-          error.response?.data?.message ||
-          'Error',
-        );
+        return;
 
       }
 
-    };
+      if (Number(monto) <= 0) {
+
+        toast.error("Monto inválido");
+
+        return;
+
+      }
+
+      await api.post("/payments", {
+
+        id_orden_compra: idOrden,
+
+        monto,
+
+        metodo_pago: metodoPago,
+
+        observaciones,
+
+      });
+
+      toast.success("Pago registrado correctamente");
+
+      setIdOrden("");
+      setMonto("");
+      setMetodoPago("EFECTIVO");
+      setObservaciones("");
+
+      loadPayments();
+      loadOrders();
+
+    } catch (error: any) {
+
+      console.error(error);
+
+      toast.error(
+        error.response?.data?.message ||
+        "Error al registrar el pago"
+      );
+
+    }
+
+  };
 
   return (
 
-    <div>
+    <div className="space-y-6">
 
-      <h1>
-        Pagos
-      </h1>
-
-      <hr />
-
-      <h2>
-        Nuevo Pago
-      </h2>
-
-      <select
-        value={idOrden}
-        onChange={(e) =>
-          setIdOrden(
-            e.target.value,
-          )
-        }
-      >
-
-        <option value="">
-          Seleccionar Orden Aprobada
-        </option>
-
-          {orders.map(
-            (order) => (
-
-            <option
-              key={
-                order.id_orden_compra
-              }
-              value={
-                order.id_orden_compra
-              }
-            >
-
-              {
-                order.numero_orden
-              }
-
-            </option>
-
-          ),
-        )}
-
-      </select>
-{<div
-  style={{
-    marginTop: '10px',
-    marginBottom: '10px',
-  }}
->
-{ordenSeleccionada && (
-
-  <div
-    style={{
-      marginTop: '10px',
-      marginBottom: '10px',
-      padding: '10px',
-      border: '1px solid #ccc',
-    }}
-  >
-
-    <div>
-      <strong>Orden:</strong>{' '}
-      {ordenSeleccionada.numero_orden}
-    </div>
-
-    <div>
-      <strong>Cliente:</strong>{' '}
-      {ordenSeleccionada.cliente}
-    </div>
-
-    <div>
-      <strong>Total:</strong>{' '}
-      ${ordenSeleccionada.total}
-    </div>
-
-    <div>
-      <strong>Pagado:</strong>{' '}
-      ${ordenSeleccionada.total_pagado}
-    </div>
-
-    <div>
-      <strong>Pendiente:</strong>{' '}
-      ${ordenSeleccionada.saldo_pendiente}
-    </div>
-
-  </div>
-
-)}
-</div> }
-{/*       <div
-        style={{
-          marginTop: '10px',
-          marginBottom: '10px',
-        }}
-      >
-
-        <strong>
-          Orden:
-        </strong>
-
-        {' '}
-
-        {
-          ordenSeleccionada
-            ?.numero_orden
-        }
-
-        {' | '}
-
-        <strong>
-          Cliente:
-        </strong>
-
-        {' '}
-
-        {
-          ordenSeleccionada
-            ?.clientes?.nombre
-        }
-
-        {' '}
-
-        {
-          ordenSeleccionada
-            ?.clientes?.apellido
-        }
-
-        {' | '}
-
-        <strong>
-          Total:
-        </strong>
-
-        {' '}
-
-        $
-
-        {
-          ordenSeleccionada
-            ?.total
-        }
-
-      </div> */}
-
-      <input
-        placeholder="Monto"
-        value={monto}
-        onChange={(e) =>
-          setMonto(
-            e.target.value,
-          )
-        }
+      <PageHeader
+        title="Pagos"
+        description="Gestión de pagos de órdenes aprobadas."
       />
 
-      {' '}
+      {/* Formulario */}
+      <Card>
 
-      <select
-        value={metodoPago}
-        onChange={(e) =>
-          setMetodoPago(
-            e.target.value,
-          )
-        }
-      >
+        <CardHeader>
+          <CardTitle>Registrar pago</CardTitle>
+        </CardHeader>
 
-        <option value="EFECTIVO">
-          EFECTIVO
-        </option>
+        <CardContent className="space-y-4">
 
-        <option value="TRANSFERENCIA">
-          TRANSFERENCIA
-        </option>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-        <option value="TARJETA">
-          TARJETA
-        </option>
+            <div className="space-y-2">
 
-      </select>
+              <label className="text-sm font-medium">
+                Orden aprobada
+              </label>
 
-      {' '}
-
-      <input
-        placeholder="Observaciones"
-        value={observaciones}
-        onChange={(e) =>
-          setObservaciones(
-            e.target.value,
-          )
-        }
-      />
-
-      {' '}
-
-      <button
-        onClick={createPayment}
-      >
-        Guardar
-      </button>
-
-      <hr />
-
-      <table border={1}>
-
-        <thead>
-
-          <tr>
-
-            <th>ID</th>
-
-            <th>Orden</th>
-
-            <th>Cliente</th>
-
-            <th>Método</th>
-
-            <th>Monto</th>
-
-          </tr>
-
-        </thead>
-
-        <tbody>
-
-          {payments.map(
-            (payment) => (
-
-              <tr
-                key={
-                  payment.id_pago
-                }
+              <Select
+                value={idOrden}
+                onValueChange={setIdOrden}
               >
 
-                <td>
-                  {
-                    payment.id_pago
-                  }
-                </td>
+                <SelectTrigger>
+                  <SelectValue placeholder="Seleccionar orden aprobada" />
+                </SelectTrigger>
 
-                <td>
-                  {
-                    payment.ordenes_compra
-                      ?.numero_orden
-                  }
-                </td>
+                <SelectContent>
 
-                <td>
+                  {orders.map((order) => (
 
-                  {
-                    payment.clientes
-                      ?.nombre
-                  }
+                    <SelectItem
+                      key={order.id_orden_compra}
+                      value={String(order.id_orden_compra)}
+                    >
+                      {order.numero_orden}
+                    </SelectItem>
 
-                  {' '}
+                  ))}
 
-                  {
-                    payment.clientes
-                      ?.apellido
-                  }
+                </SelectContent>
 
-                </td>
+              </Select>
 
-                <td>
-                  {
-                    payment.metodo_pago
-                  }
-                </td>
+            </div>
 
-                <td>
+            <div className="space-y-2">
 
-                  $
+              <label className="text-sm font-medium">
+                Método de pago
+              </label>
 
-                  {
-                    payment.monto
-                  }
+              <Select
+                value={metodoPago}
+                onValueChange={setMetodoPago}
+              >
 
-                </td>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
 
-              </tr>
+                <SelectContent>
 
-            ),
+                  <SelectItem value="EFECTIVO">
+                    Efectivo
+                  </SelectItem>
+
+                  <SelectItem value="TRANSFERENCIA">
+                    Transferencia
+                  </SelectItem>
+
+                  <SelectItem value="TARJETA">
+                    Tarjeta
+                  </SelectItem>
+
+                </SelectContent>
+
+              </Select>
+
+            </div>
+
+          </div>
+
+          {/* Resumen de la orden */}
+          {ordenSeleccionada && (
+
+            <Card className="bg-muted/30">
+
+              <CardContent className="p-4">
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+                  <div>
+                    <p className="text-sm text-muted-foreground">
+                      Orden
+                    </p>
+                    <p className="font-semibold">
+                      {ordenSeleccionada.numero_orden}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-sm text-muted-foreground">
+                      Cliente
+                    </p>
+                    <p className="font-semibold">
+                      {ordenSeleccionada.cliente}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-sm text-muted-foreground">
+                      Total
+                    </p>
+                    <p className="font-semibold">
+                      ${ordenSeleccionada.total}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-sm text-muted-foreground">
+                      Pendiente
+                    </p>
+                    <p className="font-semibold text-orange-600">
+                      ${ordenSeleccionada.saldo_pendiente}
+                    </p>
+                  </div>
+
+                </div>
+
+              </CardContent>
+
+            </Card>
+
           )}
 
-        </tbody>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-      </table>
+            <div className="space-y-2">
+
+              <label className="text-sm font-medium">
+                Monto
+              </label>
+
+              <Input
+                type="number"
+                placeholder="Monto"
+                value={monto}
+                onChange={(e) => setMonto(e.target.value)}
+              />
+
+            </div>
+
+            <div className="space-y-2">
+
+              <label className="text-sm font-medium">
+                Observaciones
+              </label>
+
+              <Input
+                placeholder="Observaciones"
+                value={observaciones}
+                onChange={(e) =>
+                  setObservaciones(e.target.value)
+                }
+              />
+
+            </div>
+
+          </div>
+
+          <div className="flex justify-end">
+
+            <Button onClick={createPayment}>
+              Guardar pago
+            </Button>
+
+          </div>
+
+        </CardContent>
+
+      </Card>
+
+      {/* Tabla de pagos */}
+      <Card>
+
+        <CardHeader>
+          <CardTitle>Historial de pagos</CardTitle>
+        </CardHeader>
+
+        <CardContent>
+
+          <Table>
+
+            <TableHeader>
+
+              <TableRow>
+
+                <TableHead>ID</TableHead>
+
+                <TableHead>Orden</TableHead>
+
+                <TableHead>Cliente</TableHead>
+
+                <TableHead>Método</TableHead>
+
+                <TableHead className="text-right">
+                  Monto
+                </TableHead>
+
+              </TableRow>
+
+            </TableHeader>
+
+            <TableBody>
+
+              {payments.map((payment) => (
+
+                <TableRow key={payment.id_pago}>
+
+                  <TableCell>{payment.id_pago}</TableCell>
+
+                  <TableCell className="font-medium">
+                    {payment.ordenes_compra?.numero_orden}
+                  </TableCell>
+
+                  <TableCell>
+                    {payment.clientes?.nombre}
+                    {" "}
+                    {payment.clientes?.apellido}
+                  </TableCell>
+
+                  <TableCell>
+                    {payment.metodo_pago}
+                  </TableCell>
+
+                  <TableCell className="text-right font-semibold">
+                    ${payment.monto}
+                  </TableCell>
+
+                </TableRow>
+
+              ))}
+
+            </TableBody>
+
+          </Table>
+
+        </CardContent>
+
+      </Card>
 
     </div>
 
   );
 
 }
-

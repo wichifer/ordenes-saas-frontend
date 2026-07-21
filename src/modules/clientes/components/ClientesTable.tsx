@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 
 import DataTable from "@/components/common/DataTable";
-import StatusBadge from "@/components/common/StatusBadge";
+import  {StatusBadge} from "@/components/common/StatusBadge";
 import { Button } from "@/components/ui/button";
 
 import type {
@@ -110,12 +110,18 @@ export default function ClientesTable({
       render: (row: Cliente) => (
 
         <StatusBadge
-          status={
+          variant={
             row.estado
-              ? "active"
-              : "inactive"
+              ? "default"
+              : "destructive"
           }
-        />
+        >
+          {
+            row.estado
+              ? "Activo"
+              : "Inactivo"
+          }
+        </StatusBadge>
 
       ),
 

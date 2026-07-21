@@ -9,7 +9,8 @@ import Products from "./pages/Products";
 import CreateProduct from "./pages/CreateProduct";
 import EditProduct from "./pages/EditProduct";
 import LowStock from "./pages/LowStock";
-import Orders from "./pages/Orders";
+//import Orders from "./pages/Orders";
+import OrdersPage from "@/modules/orders/pages/OrdersPage";
 import CreateOrder from "./pages/CreateOrder";
 import OrderDetail from "./pages/OrderDetail";
 import Cash from "./pages/Cash";
@@ -60,7 +61,7 @@ function App() {
 
             <Route path="/low-stock" element={<LowStock />} />
 
-            <Route path="/orders" element={<Orders />} />
+            <Route path="/orders" element={<OrdersPage />} />
             <Route path="/orders/new" element={<CreateOrder />} />
             <Route path="/orders/:id" element={<OrderDetail />} />
 

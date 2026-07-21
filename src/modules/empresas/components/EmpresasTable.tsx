@@ -2,7 +2,7 @@
 import { Pencil, Trash2 } from "lucide-react";
 
 import DataTable from "@/components/common/DataTable";
-import StatusBadge from "@/components/common/StatusBadge";
+import { StatusBadge } from "@/components/common/StatusBadge";
 import { Button } from "@/components/ui/button";
 
 import type { Empresa } from "@/types/empresa";
