@@ -4,12 +4,14 @@ import { TableActions } from "@/components/common/TableActions";
 import type { Order } from "../types/order";
 import { useOrderDrawer } from "../hooks/useOrderDrawer";
 
+
+import { OrderStatusBadge } from "./OrderStatusBadge";
+
 import {
   useApproveOrder,
   useDeleteOrder,
+  useCancelOrder,
 } from "../queries/orders.queries";
-
-import { OrderStatusBadge } from "./OrderStatusBadge";
 
 export function useOrderColumns(): Column<Order>[] {
 
@@ -18,30 +20,32 @@ export function useOrderColumns(): Column<Order>[] {
   const approveMutation = useApproveOrder();
 
   const deleteMutation = useDeleteOrder();
+  
+  const cancelMutation = useCancelOrder();
 
-  return [
+    return [
 
-    {
-      key: "numero_orden",
-      header: "Número",
+      {
+        key: "numero_orden",
+        header: "Número",
 
-      render: (order) => (
-        <div className="font-medium">
-          {order.numero_orden}
-        </div>
-      ),
-    },
+        render: (order) => (
+          <div className="font-medium">
+            {order.numero_orden}
+          </div>
+        ),
+      },
 
-    {
-      key: "fecha",
-      header: "Fecha",
+      {
+        key: "fecha",
+        header: "Fecha",
 
-      render: (order) => (
-        <div className="text-sm">
-          {new Date(order.fecha).toLocaleDateString()}
-        </div>
-      ),
-    },
+        render: (order) => (
+          <div className="text-sm">
+            {new Date(order.fecha).toLocaleDateString()}
+          </div>
+        ),
+      },
 
     
 {
@@ -110,6 +114,14 @@ render: (order) => (
             order.estado === "PENDIENTE"
               ? () =>
                   approveMutation.mutate(
+                    order.id_orden_compra
+                  )
+              : undefined
+          }
+          onCancel={
+            order.estado === "APROBADA"
+              ? () =>
+                  cancelMutation.mutate(
                     order.id_orden_compra
                   )
               : undefined

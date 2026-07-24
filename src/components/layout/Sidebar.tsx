@@ -1,8 +1,6 @@
 /* src/components/layout/Sidebar.tsx*/
-import { NavLink } from "react-router-dom";
-import { cn } from "@/lib/utils";
-import { navigation } from "./navigation";
 
+import SidebarNav from "./SidebarNav";
 
 export default function Sidebar() {
   return (
@@ -11,46 +9,19 @@ export default function Sidebar() {
         hidden md:flex
         w-64 shrink-0
         flex-col
-        border-r border-border
+        border-r
         bg-sidebar
         text-sidebar-foreground
         min-h-screen
       "
     >
-      {/* Header */}
-      <div className="h-14 flex items-center px-4 border-b border-sidebar-border">
-        <span className="font-bold text-sm text-sidebar-foreground">
+      <div className="h-14 flex items-center px-4 border-b">
+        <span className="font-bold text-sm">
           SaaS T420
         </span>
       </div>
 
-      {/* Nav */}
-      <nav className="flex-1 p-2 space-y-1">
-        {navigation.map((item) => {
-          const Icon = item.icon;
-
-          return (
-            <NavLink
-              key={item.href}
-              to={item.href}
-              className={({ isActive }) =>
-                cn(
-                  "flex items-center gap-3 px-3 py-2 rounded-md text-sm transition w-full truncate",
-                  "hover:bg-sidebar-primary/10 hover:text-sidebar-foreground",
-                  isActive
-                    ? "bg-sidebar-primary text-white"
-                    : "text-sidebar-foreground/90"
-                )
-              }
-            >
-              <Icon className="h-4 w-4" />
-              <span className="truncate">
-                {item.label}
-              </span>
-            </NavLink>
-          );
-        })}
-      </nav>
+      <SidebarNav />
     </aside>
   );
 }

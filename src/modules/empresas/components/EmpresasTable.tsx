@@ -40,7 +40,7 @@ export default function EmpresasTable({
   render: (row: Empresa) => (
     <div className="flex items-center gap-3">
       <StatusBadge
-        status={row.estado ? "active" : "inactive"}
+        status={row.estado ? "active" : "inactive"}  
       />
 
       <EmpresaStatusSwitch empresa={row} />

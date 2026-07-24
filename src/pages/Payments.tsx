@@ -40,13 +40,10 @@ export default function Payments() {
   const [searchParams] = useSearchParams();
 
   const [payments, setPayments] = useState<any[]>([]);
-
   const [orders, setOrders] = useState<any[]>([]);
 
   const [idOrden, setIdOrden] = useState("");
-
   const [monto, setMonto] = useState("");
-
   const [metodoPago, setMetodoPago] =
     useState("EFECTIVO");
 
@@ -150,6 +147,18 @@ export default function Payments() {
 
       }
 
+      if (
+        ordenSeleccionada &&
+        Number(monto) >
+        Number(ordenSeleccionada.saldo_pendiente)
+      ) {
+
+        toast.error("El pago supera el saldo pendiente");
+
+        return;
+
+      }
+
       await api.post("/payments", {
 
         id_orden_compra: idOrden,
@@ -169,8 +178,8 @@ export default function Payments() {
       setMetodoPago("EFECTIVO");
       setObservaciones("");
 
-      loadPayments();
-      loadOrders();
+      await loadPayments();
+      await loadOrders();
 
     } catch (error: any) {
 
@@ -228,7 +237,7 @@ export default function Payments() {
                       key={order.id_orden_compra}
                       value={String(order.id_orden_compra)}
                     >
-                      {order.numero_orden}
+                      {order.numero_orden} - {order.cliente}
                     </SelectItem>
 
                   ))}
@@ -309,6 +318,15 @@ export default function Payments() {
                     </p>
                     <p className="font-semibold">
                       ${ordenSeleccionada.total}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-sm text-muted-foreground">
+                      Pagado
+                    </p>
+                    <p className="font-semibold text-green-600">
+                      ${ordenSeleccionada.total_pagado}
                     </p>
                   </div>
 
@@ -420,9 +438,8 @@ export default function Payments() {
                   </TableCell>
 
                   <TableCell>
-                    {payment.clientes?.nombre}
-                    {" "}
-                    {payment.clientes?.apellido}
+                    {payment.clientes?.razon_social ||
+                      `${payment.clientes?.nombre ?? ""} ${payment.clientes?.apellido ?? ""}`}
                   </TableCell>
 
                   <TableCell>

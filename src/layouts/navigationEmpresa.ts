@@ -4,19 +4,14 @@ import {
   Package,
   ShoppingCart,
   CreditCard,
-  Wallet,
-  Boxes,
   BarChart3,
-  ClipboardList,
+  Warehouse,
+  Wallet,
 } from "lucide-react";
 
-export interface NavigationItem {
-  label: string;
-  href: string;
-  icon: React.ElementType;
-}
+import type { NavigationItem } from "./navigation.types";
 
-export const navigation: NavigationItem[] = [
+export const navigationEmpresa: NavigationItem[] = [
   {
     label: "Dashboard",
     href: "/dashboard",
@@ -50,12 +45,7 @@ export const navigation: NavigationItem[] = [
   {
     label: "Stock",
     href: "/stock-movements",
-    icon: Boxes,
-  },
-  {
-    label: "Stock bajo",
-    href: "/low-stock",
-    icon: ClipboardList,
+    icon: Warehouse,
   },
   {
     label: "Reportes",

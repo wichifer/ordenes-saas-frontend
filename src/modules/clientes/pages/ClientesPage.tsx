@@ -8,8 +8,8 @@ import EmptyState from "@/components/common/EmptyState";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
 
 import { Button } from "@/components/ui/button";
+import { ClientesTable } from "../components/ClientesTable";
 
-import ClientesTable from "../components/ClientesTable";
 import { ClienteUIController } from "../components/ClienteUIController";
 
 import { useClientes } from "../hooks/useClientes";
@@ -20,6 +20,8 @@ import type { Cliente } from "../types/cliente";
 
 
 export default function ClientesPage() {
+
+  console.log("ENTRO A CLIENTES PAGE");
 
   const {
     data: clientes = [],
@@ -50,7 +52,13 @@ export default function ClientesPage() {
     setClienteAEliminar,
   ] =
     useState<Cliente | null>(null);
+console.log("CLIENTES PAGE RENDER");
 
+console.log({
+  clientes,
+  isLoading,
+  error,
+});
 
   const filtered =
     useMemo(() => {

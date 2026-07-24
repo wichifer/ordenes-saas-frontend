@@ -17,6 +17,8 @@ import { useProducts } from "@/modules/products/hooks/useProducts";
 
 import type { CreateOrderDto } from "../types/order";
 
+import type { Product } from "@/modules/products/types/product";
+
 interface Props {
   readonly?: boolean;
 }
@@ -37,41 +39,43 @@ export function OrderFormFields({ readonly }: Props) {
   const [clientModalOpen, setClientModalOpen] = useState(false);
   const [productModalOpen, setProductModalOpen] = useState(false);
 
-  // Cliente seleccionado
-  const selectedClientId = watch("id_cliente");
-  const selectedClient = clientes.find(
-    (c) => String(c.id_cliente) === String(selectedClientId)
+// Cliente seleccionado
+const selectedClientId = watch("id_cliente");
+
+const selectedClient = clientes.find(
+  (c) => String(c.id_cliente) === String(selectedClientId)
+);
+
+const clientLabel = selectedClient
+  ? selectedClient.razon_social?.trim() ||
+    `${selectedClient.nombre ?? ""} ${selectedClient.apellido ?? ""}`.trim()
+  : "Buscar cliente";
+
+
+// Agregar producto
+const handleAddProduct = (product: Product) => {
+  const existingIndex = fields.findIndex(
+    (item) =>
+      item.id_articulo === String(product.id_articulo)
   );
 
-  const clientLabel = selectedClient
-    ? selectedClient.razon_social ??
-      `${selectedClient.nombre ?? ""} ${selectedClient.apellido ?? ""}`.trim()
-    : "Buscar cliente";
+  if (existingIndex >= 0) {
+    const currentQty =
+      watch(`items.${existingIndex}.cantidad`) || 0;
 
-  // Agregar producto
-  const handleAddProduct = (product: any) => {
-    const existingIndex = fields.findIndex(
-      (item) =>
-        item.id_articulo === String(product.id_articulo)
+    setValue(
+      `items.${existingIndex}.cantidad`,
+      currentQty + 1
     );
-
-    if (existingIndex >= 0) {
-      const currentQty =
-        watch(`items.${existingIndex}.cantidad`) || 0;
-
-      setValue(
-        `items.${existingIndex}.cantidad`,
-        currentQty + 1
-      );
-    } else {
-      append({
-        id_articulo: String(product.id_articulo),
-        descripcion_articulo: product.descripcion,
-        cantidad: 1,
-        precio_unitario: Number(product.precio_final),
-      });
-    }
-  };
+  } else {
+    append({
+      id_articulo: String(product.id_articulo),
+      descripcion_articulo: product.descripcion,
+      cantidad: 1,
+      precio_unitario: Number(product.precio_final),
+    });
+  }
+};
 
   const items = watch("items") || [];
 
@@ -214,7 +218,7 @@ export function OrderFormFields({ readonly }: Props) {
           </div>
 
           {/* Total */}
-          <div className="flex justify-end pt-4 border-t mt-4">
+          {/* <div className="flex justify-end pt-4 border-t mt-4">
             <div className="text-right">
               <p className="text-sm text-muted-foreground">
                 Total de la orden
@@ -223,25 +227,31 @@ export function OrderFormFields({ readonly }: Props) {
                 ${total.toFixed(2)}
               </p>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 
       {/* Modal de clientes */}
-      <SearchModal
-        open={clientModalOpen}
-        onOpenChange={setClientModalOpen}
-        title="Cliente"
-        items={clientes.map((cliente) => ({
-          id: String(cliente.id_cliente),
-          label:
-            cliente.razon_social ??
-            `${cliente.nombre ?? ""} ${cliente.apellido ?? ""}`.trim(),
-        }))}
-        onSelect={(item) => {
-          setValue("id_cliente", item.id);
-        }}
-      />
+<SearchModal
+  open={clientModalOpen}
+  onOpenChange={setClientModalOpen}
+  title="Cliente"
+  items={clientes.map((cliente) => {
+    const nombreCompleto =
+      `${cliente.nombre ?? ""} ${cliente.apellido ?? ""}`.trim();
+
+    return {
+      id: String(cliente.id_cliente),
+      label:
+        cliente.razon_social && nombreCompleto
+          ? `${cliente.razon_social} — ${nombreCompleto}`
+          : cliente.razon_social || nombreCompleto,
+    };
+  })}
+  onSelect={(item) => {
+    setValue("id_cliente", item.id);
+  }}
+/>
 
       {/* Modal de productos */}
       <SearchModal

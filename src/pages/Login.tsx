@@ -46,8 +46,21 @@ export default function Login() {
           response.data.usuario
         )
       );
-      toast.success("Bienvenido al panel SaaS");
-      navigate("/saas/empresas");
+      const usuario = response.data.usuario;
+
+      localStorage.setItem(
+        "usuario",
+        JSON.stringify(usuario)
+      );
+
+      if (usuario.rol === "ADMIN_SAAS") {
+        toast.success("Bienvenido al Panel SaaS");
+        navigate("/saas/dashboard");
+      } else {
+        toast.success("Bienvenido");
+        navigate("/dashboard");
+      }
+
 
 } catch (error: any) {
 

@@ -1,12 +1,18 @@
+// C:\dev\ordenes-saas-frontend\src\modules\orders\components\OrderDetails.tsx
 import type { Order } from "../types/order";
 
 import { OrderStatusBadge } from "./OrderStatusBadge";
+
 
 interface Props {
   order?: Order;
 }
 
-export function OrderDetails({ order }: Props) {
+
+export function OrderDetails({
+  order,
+}: Props) {
+
 
   if (!order) {
     return (
@@ -16,179 +22,181 @@ export function OrderDetails({ order }: Props) {
     );
   }
 
+
   return (
 
     <div className="space-y-6">
 
-      {/* Encabezado */}
-      <div className="rounded-lg border p-4">
 
-        <div className="flex items-center justify-between">
+      <div className="grid grid-cols-2 gap-4">
 
-          <div>
 
-            <p className="text-sm text-muted-foreground">
-              Orden de Compra
-            </p>
+        <div>
+          <p className="text-sm text-muted-foreground">
+            Número
+          </p>
 
-            <h2 className="text-2xl font-bold">
-              {order.numero_orden}
-            </h2>
+          <p className="font-medium">
+            {order.numero_orden}
+          </p>
+        </div>
 
-          </div>
 
-          <OrderStatusBadge status={order.estado} />
+
+        <div>
+          <p className="text-sm text-muted-foreground">
+            Fecha
+          </p>
+
+          <p className="font-medium">
+            {
+              new Date(order.fecha)
+                .toLocaleDateString()
+            }
+          </p>
+        </div>
+
+
+
+        <div>
+          <p className="text-sm text-muted-foreground">
+            Cliente
+          </p>
+
+          <p className="font-medium">
+
+            {
+              order.cliente?.razon_social ?? 
+              order.cliente?.nombre ??       
+              "-"
+            }
+
+          </p>
+        </div>
+
+
+
+        <div>
+          <p className="text-sm text-muted-foreground">
+            Estado
+          </p>
+
+          <OrderStatusBadge
+            status={order.estado}
+          />
 
         </div>
 
+
       </div>
 
-      {/* Información general */}
-      <div className="rounded-lg border p-4">
 
-        <h3 className="mb-4 font-semibold">
-          Información general
+
+      <div>
+
+        <h3 className="mb-3 font-semibold">
+          Detalle
         </h3>
 
-        <div className="grid grid-cols-2 gap-4">
 
-          <div>
-            <p className="text-sm text-muted-foreground">
-              Fecha
-            </p>
-            <p className="font-medium">
-              {new Date(order.fecha).toLocaleDateString()}
-            </p>
-          </div>
 
-          <div>
-            <p className="text-sm text-muted-foreground">
-              Cliente
-            </p>
-            <p className="font-medium">
-              {order.cliente?.razon_social ??
-                order.cliente?.nombre ??
-                "-"}
-            </p>
-          </div>
+        <div className="space-y-2">
+
+
+          {
+            order.items?.map((item) => (
+
+              <div
+                key={item.id_detalle_orden}
+                className="
+                  flex
+                  justify-between
+                  border-b
+                  pb-2
+                "
+              >
+
+                <div>
+
+                  <p className="font-medium">
+                    {item.descripcion_articulo}
+                  </p>
+
+                  <p className="text-sm text-muted-foreground">
+                    Cantidad: {item.cantidad}
+                  </p>
+
+                </div>
+
+
+
+                <div className="text-right">
+
+
+                <p>
+                $
+                    {
+                        (Number(item.subtotal) || 0)
+                        .toFixed(2)
+                    }
+                </p>
+
+
+                </div>
+
+
+              </div>
+
+            ))
+          }
+
 
         </div>
+
 
       </div>
 
-      {/* Productos */}
-      <div className="rounded-lg border">
 
-        <div className="border-b p-4">
-          <h3 className="font-semibold">
-            Productos
-          </h3>
-        </div>
 
-        <div className="overflow-x-auto">
+      <div className="flex justify-end">
 
-          <table className="w-full">
+        <div className="text-right">
 
-            <thead className="border-b bg-muted/50">
 
-              <tr>
+          <p className="text-sm text-muted-foreground">
+            Total
+          </p>
 
-                <th className="p-3 text-left text-sm font-medium">
-                  Producto
-                </th>
 
-                <th className="p-3 text-center text-sm font-medium">
-                  Cant.
-                </th>
-
-                <th className="p-3 text-right text-sm font-medium">
-                  Precio
-                </th>
-
-                <th className="p-3 text-right text-sm font-medium">
-                  Subtotal
-                </th>
-
-              </tr>
-
-            </thead>
-
-            <tbody>
-
-              {order.items?.map((item) => (
-
-                <tr
-                  key={item.id_detalle_orden}
-                  className="border-b"
-                >
-
-                  <td className="p-3">
-                    <p className="font-medium">
-                      {item.descripcion_articulo}
-                    </p>
-                  </td>
-
-                  <td className="p-3 text-center">
-                    {item.cantidad}
-                  </td>
-
-                  <td className="p-3 text-right">
-                    ${item.precio_unitario.toFixed(2)}
-                  </td>
-
-                  <td className="p-3 text-right font-medium">
-                    ${item.subtotal.toFixed(2)}
-                  </td>
-
-                </tr>
-
-              ))}
-
-            </tbody>
-
-          </table>
-
-        </div>
-
-      </div>
-
-      {/* Observaciones */}
-      {order.observaciones && (
-
-        <div className="rounded-lg border p-4">
-
-          <h3 className="mb-2 font-semibold">
-            Observaciones
-          </h3>
-
-          <p className="text-sm">
-            {order.observaciones}
+          <p className="text-2xl font-bold">
+             ${(Number(order.total) || 0).toFixed(2)}
           </p>
 
         </div>
 
-      )}
+      </div>
 
-      {/* Total */}
-      <div className="rounded-lg border p-4 bg-muted/30">
 
-        <div className="flex justify-between items-center">
+
+      {
+        order.observaciones && (
 
           <div>
 
             <p className="text-sm text-muted-foreground">
-              Total de la orden
+              Observaciones
             </p>
 
-            <p className="text-3xl font-bold">
-              ${order.total.toFixed(2)}
+
+            <p>
+              {order.observaciones}
             </p>
 
           </div>
 
-        </div>
+        )
+      }
 
-      </div>
 
     </div>
 

@@ -1,3 +1,4 @@
+// C:\dev\ordenes-saas-frontend\src\modules\clientes\components\ClientsTable.tsx
 import type { Column } from "@/components/common/DataTable";
 
 import DataTable from "@/components/common/DataTable";
@@ -6,13 +7,14 @@ import { TableActions } from "@/components/common/TableActions";
 import type { Cliente } from "../types/cliente";
 
 interface Props {
-  data: Cliente[];
+  clientes: Cliente[];
   onView: (cliente: Cliente) => void;
   onEdit: (cliente: Cliente) => void;
   onDelete: (cliente: Cliente) => void;
 }
+
 export function ClientesTable({
-  data,
+  clientes,
   onView,
   onEdit,
   onDelete,
@@ -52,9 +54,9 @@ export function ClientesTable({
   ];
 
   return (
-<DataTable
-  columns={columns}
-  data={data}
-/>
+    <DataTable
+      columns={columns}
+      data={clientes}
+    />
   );
 }

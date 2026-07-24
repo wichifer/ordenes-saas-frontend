@@ -48,6 +48,8 @@ export interface CreateOrderDto {
     cantidad: number;
     precio_unitario: number;
   }[];
+    // Nuevo
+  aprobar_automaticamente?: boolean;
 }
 export interface CreateOrderItemDto {
    id_articulo: number;
@@ -56,5 +58,14 @@ export interface CreateOrderItemDto {
    precio_unitario: number;
 }
 
-export interface UpdateOrderDto
-  extends CreateOrderDto {}
+export type OrderStatus =
+  | "PENDIENTE"
+  | "APROBADA"
+  | "ANULADA";
+
+export interface UpdateOrderDto {
+  id_cliente?: string;
+  observaciones?: string;
+  items?: CreateOrderDto["items"];
+  estado?: OrderStatus;
+}

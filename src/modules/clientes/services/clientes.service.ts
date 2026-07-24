@@ -3,6 +3,7 @@ import { api } from "@/api/api";
 
 import type {
   Cliente,
+  ClienteEstadoCuenta,
 } from "../types/cliente";
 
 import type {
@@ -20,9 +21,9 @@ export const clientesService = {
     return data;
   },
 
-async create(
-  payload: ClienteFormValues,
-): Promise<Cliente> {
+  async create(
+    payload: ClienteFormValues,
+  ): Promise<Cliente> {
     const { data } = await api.post(
       "/clients",
       payload,
@@ -31,10 +32,10 @@ async create(
     return data;
   },
 
-async update(
-  id: number,
-  payload: ClienteFormValues,
-): Promise<Cliente> {
+  async update(
+    id: number,
+    payload: ClienteFormValues,
+  ): Promise<Cliente> {
     const { data } = await api.patch(
       `/clients/${id}`,
       payload,
@@ -65,8 +66,10 @@ async update(
     return data;
   },
 
-  async getEstadoCuenta(id: number) {
-    const { data } = await api.get(
+  async getEstadoCuenta(
+    id: number,
+  ): Promise<ClienteEstadoCuenta> {
+    const { data } = await api.get<ClienteEstadoCuenta>(
       `/clients/${id}/estado-cuenta`,
     );
 

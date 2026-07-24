@@ -54,16 +54,14 @@ export function useCreateOrder() {
   return useMutation({
     mutationFn: ordersService.create,
 
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.success("Orden creada correctamente.");
 
       queryClient.invalidateQueries({
         queryKey: ordersKeys.all,
       });
 
-      // queryClient.invalidateQueries({
-      //   queryKey: dashboardKeys.all,
-      // });
+      return data;
     },
   });
 }
@@ -129,6 +127,31 @@ export function useApproveOrder() {
       // queryClient.invalidateQueries({
       //   queryKey: dashboardKeys.all,
       // });
+    },
+  });
+}
+export function useCancelOrder() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: number) =>
+      ordersService.update(id, {
+        estado: "ANULADA",
+      }),
+
+    onSuccess: () => {
+      toast.success("Orden anulada correctamente.");
+
+      queryClient.invalidateQueries({
+        queryKey: ordersKeys.all,
+      });
+    },
+
+    onError: (error: any) => {
+      toast.error(
+        error?.response?.data?.message ??
+          "No se pudo anular la orden."
+      );
     },
   });
 }

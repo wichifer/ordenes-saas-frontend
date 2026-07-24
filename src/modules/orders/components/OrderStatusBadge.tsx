@@ -1,3 +1,4 @@
+// C:\dev\ordenes-saas-frontend\src\modules\orders\components\OrderStatusBadge.tsx
 import { StatusBadge } from "@/components/common/StatusBadge";
 
 interface Props {

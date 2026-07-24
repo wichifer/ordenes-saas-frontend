@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/drawer";
 
 import { ClienteForm } from "../ClienteForm";
+import { ClienteDetails } from "../ClienteDetails";
 
 import { useClienteDrawer } from "../../state/useClienteDrawer";
 
@@ -22,13 +23,13 @@ export function ClienteDrawer() {
   } = useClienteDrawer();
 
 
-  const title =
-    {
-      create: "Nuevo Cliente",
-      edit: "Editar Cliente",
-      view: "Ver Cliente",
-      delete: "Eliminar Cliente",
-    }[mode] ?? "Cliente";
+const title =
+  {
+    create: "Nuevo Cliente",
+    edit: "Editar Cliente",
+    view: "Cuenta corriente",
+    delete: "Eliminar Cliente",
+  }[mode] ?? "Cliente";
 
 
   return (
@@ -39,53 +40,75 @@ export function ClienteDrawer() {
 
       onOpenChange={(value) => {
 
-        if (!value)
+        if (!value) {
           close();
+        }
 
       }}
 
     >
 
-    <DrawerContent
-    className="
-        max-w-3xl
-        w-full
-        max-h-[90vh]
-    "
-    >
+      <DrawerContent
+        className="
+          max-w-3xl
+          w-full
+          max-h-[90vh]
+        "
+      >
 
         <DrawerHeader>
 
-            <DrawerTitle>
+          <DrawerTitle>
             {title}
-            </DrawerTitle>
+          </DrawerTitle>
 
         </DrawerHeader>
 
 
         <div
-            className="
+          className="
             overflow-y-auto
             max-h-[75vh]
             px-4
             pb-4
-            "
+          "
         >
 
-                <ClienteForm
 
-                mode={mode}
+          {(mode === "create" ||
+            mode === "edit") && (
 
-                cliente={selected}
+            <ClienteForm
 
-                onClose={close}
+              mode={mode}
 
-                />
+              cliente={selected}
 
-            </div>
+              onClose={close}
+
+            />
+
+          )}
 
 
-    </DrawerContent>
+
+          {mode === "view" && selected && (
+
+            <ClienteDetails
+
+              cliente={selected}
+
+            />
+
+          )}
+
+
+
+        </div>
+
+
+      </DrawerContent>
+
 
     </Drawer>
 

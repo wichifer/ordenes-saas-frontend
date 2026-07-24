@@ -123,15 +123,15 @@ export default function CreateOrder() {
         (c) => String(c.id_cliente) === String(clientId),
       );
 
-    // Crear la orden y aprobarla automáticamente
-const response = await api.post('/orders', {
-  id_cliente: clientId,
-  observaciones: '',
-  items,
-  aprobar_automaticamente: true,
-});
+      // Crear la orden y aprobarla automáticamente
+      const response = await api.post('/orders', {
+        id_cliente: clientId,
+        observaciones: '',
+        items,
+        aprobar_automaticamente: true,
+      });
 
-const orderId = response.data.id_orden_compra;
+      const orderId = response.data.id_orden_compra;
       // 3. Si es Consumidor Final, cobrar automáticamente
       if (selectedClient?.es_consumidor_final) {
         await api.post('/payments', {
